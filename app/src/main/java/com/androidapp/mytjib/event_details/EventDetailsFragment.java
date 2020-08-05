@@ -8,10 +8,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,12 +42,22 @@ public class EventDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
 
-        int id = getArguments().getInt("id");
+        final int id = getArguments().getInt("id");
         mViewModel.createRepository(id);
         mViewModel.getEventDetails().observe(getViewLifecycleOwner(), new Observer<Event>() {
             @Override
             public void onChanged(Event event) {
                 updateUi(event);
+            }
+        });
+
+        Button button = view.findViewById(R.id.event_details_buy);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", id);
+                Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
             }
         });
     }
