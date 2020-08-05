@@ -7,7 +7,21 @@
 
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="com.androidapp.mytjib.EventsFragment"
+        android:name="com.androidapp.mytjib.events.EventsFragment"
         android:label="events_fragment"
-        tools:layout="@layout/events_fragment" />
+        tools:layout="@layout/events_fragment" >
+        <action
+            android:id="@+id/action_eventsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.androidapp.mytjib.event_details.EventDetailsFragment"
+        android:label="event_details_fragment"
+        tools:layout="@layout/event_details_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

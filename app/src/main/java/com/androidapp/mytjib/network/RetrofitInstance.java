@@ -7,9 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
     private static Retrofit retrofit;
-  //  private static final String BASE_URL = "http://192.168.44.1:8080/";
+    //private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
+    //private static final String BASE_URL = "http://192.168.44.1:8080/";
+    private static final String BASE_URL = "http://tjib-gateway.azuremicroservices.io/";
 
-    private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     public static Retrofit getRetrofitInstance() {
 

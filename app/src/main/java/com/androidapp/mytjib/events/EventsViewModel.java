@@ -1,7 +1,10 @@
-package com.androidapp.mytjib;
+package com.androidapp.mytjib.events;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.Repository;
 
 import java.util.List;
 
@@ -11,11 +14,10 @@ public class EventsViewModel extends ViewModel {
 
     public void createRepository(){
         repository  = new Repository();
-
         repository.getEventsFromServer();
     }
 
-    public LiveData<Movie> getEvents(){
+    public LiveData<List<Event>> getEvents(){
         return repository.getEventsLive();
     }
 }
