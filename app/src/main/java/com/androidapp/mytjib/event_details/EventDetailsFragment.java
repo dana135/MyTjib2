@@ -57,7 +57,7 @@ public class EventDetailsFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", id);
-                Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_event_buy_tickets, bundle);
             }
         });
     }

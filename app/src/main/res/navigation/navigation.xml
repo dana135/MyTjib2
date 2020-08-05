@@ -23,5 +23,18 @@
             android:name="id"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
+            app:destination="@id/event_buy_tickets" />
+    </fragment>
+    <fragment
+        android:id="@+id/event_buy_tickets"
+        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
+        android:label="fragment_event_buy_tickets"
+        tools:layout="@layout/fragment_event_buy_tickets" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 </navigation>
