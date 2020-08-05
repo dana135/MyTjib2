@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
+import com.bumptech.glide.Glide;
 
 public class EventDetailsFragment extends Fragment {
 
     private EventDetailsViewModel mViewModel;
+    private View view;
 
     public static EventDetailsFragment newInstance() {
         return new EventDetailsFragment();
@@ -34,6 +36,7 @@ public class EventDetailsFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        view = getView();
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
 
@@ -48,7 +51,12 @@ public class EventDetailsFragment extends Fragment {
     }
 
     private void updateUi(Event event) {
-
+        ImageView imageView = view.findViewById(R.id.event_details_image);
+        TextView nameView = view.findViewById(R.id.event_details_name);
+        Glide.with(imageView)
+                .load(event.getImage()) // image url
+                .into(imageView);  // imageview object
+        nameView.setText(event.getName());
     }
 
 }
