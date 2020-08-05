@@ -4,7 +4,7 @@ package com.androidapp.mytjib;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.androidapp.mytjib.network.EventsApiService;
+import com.androidapp.mytjib.network.ApiService;
 import com.androidapp.mytjib.network.RetrofitInstance;
 
 import java.util.List;
@@ -18,20 +18,26 @@ public class Repository {
 
     private MutableLiveData<List<Event>> eventsLive;
     private MutableLiveData<Event> currentEventLive;
+    private MutableLiveData<List<Venue>> venuesLive;
     private int currentEventId;
 
     public Repository() {
         this.eventsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
+        this.venuesLive = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Event>> getEventsLive() {
         return eventsLive;
     }
 
+    public MutableLiveData<List<Venue>> getVenuesLive() {
+        return venuesLive;
+    }
+
     public void getEventsFromServer(){
-        EventsApiService service = RetrofitInstance.
-                getRetrofitInstance().create(EventsApiService.class);
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
 
        Call<List<Event>> call = service.getEvents();
 
@@ -51,8 +57,8 @@ public class Repository {
     }
 
     public void getEventDetailsFromServer() {
-        EventsApiService service = RetrofitInstance.
-                getRetrofitInstance().create(EventsApiService.class);
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
 
         Call<Event> call = service.getEventDetails(currentEventId);
 
@@ -76,5 +82,26 @@ public class Repository {
 
     public void setEventId(int id) {
         currentEventId = id;
+    }
+
+    public void getVenuesFromServer(){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Venue>> call = service.getVenues();
+
+        call.enqueue(new Callback<List<Venue>>() {
+
+            @Override
+            public void onResponse(Call<List<Venue>> call, Response<List<Venue>> response) {
+                List<Venue> venues = response.body();
+                venuesLive.postValue(venues);
+            }
+
+            @Override
+            public void onFailure(Call<List<Venue>> call, Throwable t) {
+
+            }
+        });
     }
 }

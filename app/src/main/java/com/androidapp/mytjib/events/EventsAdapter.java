@@ -32,7 +32,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.event_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,10 +41,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         final Event event = events.get(position);
         holder.nameTextView.setText(event.getName());
 
-        String url = "https://www.w3schools.com/w3css/img_lights.jpg";
-
         Glide.with(context)
-                .load(url) // image url
+                .load(event.getImage()) // image url
                 .into(holder.image);  // imageview object
 
         holder.parent.setOnClickListener(new View.OnClickListener() {
