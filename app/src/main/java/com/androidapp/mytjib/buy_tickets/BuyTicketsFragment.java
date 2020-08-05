@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ public class BuyTicketsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        view = getView();
 
         EventDetailsViewModel mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
         final int id = getArguments().getInt("id");
@@ -42,11 +45,23 @@ public class BuyTicketsFragment extends Fragment {
                 updateUi(tickets);
             }
         });
+
+        CheckBox checkbox = getView().findViewById(R.id.checkbox_marked_tickets);
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Spinner spinner = view.findViewById(R.id.spinner);
+                spinner.setEnabled(b);
+            }
+        });
+
     }
 
     private void updateUi(List<Ticket> tickets) {
         ArrayList<String> tickets_view = new ArrayList<>();
         for (Ticket t : tickets) {
+            if (!t.isMarked()) continue;
             tickets_view.add(String.format(Locale.KOREA, "%d - %d₩", t.getPosition(), t.getPrice()));
         }
         Spinner spinner = getView().findViewById(R.id.spinner);
