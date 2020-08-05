@@ -1,5 +1,6 @@
 package com.androidapp.mytjib.login;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.androidapp.mytjib.R;
 
@@ -35,7 +37,21 @@ public class LoginFragment extends Fragment {
     }
 
     private void login() {
-        Bundle bundle = new Bundle();
-        Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_eventsFragment, bundle);
+        if (checkCreds()) {
+            Bundle bundle = new Bundle();
+            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_eventsFragment, bundle);
+        } else {
+            Context context = getContext();
+            CharSequence text = "User does not exist - please try again or sign up";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+    }
+
+    private boolean checkCreds() {
+        return true;
     }
 }
