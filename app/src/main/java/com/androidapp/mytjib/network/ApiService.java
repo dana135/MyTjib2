@@ -2,7 +2,7 @@ package com.androidapp.mytjib.network;
 
 import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.Venue;
-import com.androidapp.mytjib.buy_tickets.Ticket;
+import com.androidapp.mytjib.Ticket;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.androidapp.mytjib.buy_tickets;
+package com.androidapp.mytjib;
 
 public class Ticket {
 

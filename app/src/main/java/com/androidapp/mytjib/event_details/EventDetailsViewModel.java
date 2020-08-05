@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.Repository;
+import com.androidapp.mytjib.Ticket;
 
 import java.util.List;
 
@@ -20,5 +21,9 @@ public class EventDetailsViewModel extends ViewModel {
 
     public LiveData<Event> getEventDetails(){
         return repository.getEventDetailsLive();
+    }
+
+    public LiveData<List<Ticket>> getTickets() {
+        return repository.getTicketsFromServer();
     }
 }

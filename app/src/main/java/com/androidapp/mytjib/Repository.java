@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.androidapp.mytjib.network.ApiService;
 import com.androidapp.mytjib.network.RetrofitInstance;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,6 +19,7 @@ import retrofit2.Response;
 public class Repository {
 
     private MutableLiveData<List<Event>> eventsLive;
+    private MutableLiveData<List<Ticket>> ticketsLive;
     private MutableLiveData<Event> currentEventLive;
     private MutableLiveData<List<Venue>> venuesLive;
     private int currentEventId;
@@ -25,6 +28,7 @@ public class Repository {
         this.eventsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
+        this.ticketsLive = new MutableLiveData<>();
     }
 
     public MutableLiveData<List<Event>> getEventsLive() {
@@ -103,5 +107,27 @@ public class Repository {
 
             }
         });
+    }
+
+    public LiveData<List<Ticket>> getTicketsFromServer() {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Ticket>> call = service.getEventTickets(currentEventId);
+
+        call.enqueue(new Callback<List<Ticket>>() {
+
+            @Override
+            public void onResponse(Call<List<Ticket>> call, Response<List<Ticket>> response) {
+                List<Ticket> tickets = response.body();
+                ticketsLive.postValue(tickets);
+            }
+
+            @Override
+            public void onFailure(Call<List<Ticket>> call, Throwable t) {
+
+            }
+        });
+        return ticketsLive;
     }
 }

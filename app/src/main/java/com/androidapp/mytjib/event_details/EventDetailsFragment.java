@@ -38,8 +38,8 @@ public class EventDetailsFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        view = getView();
         super.onActivityCreated(savedInstanceState);
+        view = getView();
         mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
 
         final int id = getArguments().getInt("id");
