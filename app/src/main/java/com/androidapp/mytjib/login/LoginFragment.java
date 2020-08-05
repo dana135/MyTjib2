@@ -8,10 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.androidapp.mytjib.R;
@@ -52,6 +54,10 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean checkCreds() {
+        EditText emailBox = getView().findViewById(R.id.email);
+        EditText passwdBox = getView().findViewById(R.id.password);
+        String email = emailBox.getText().toString();
+        String password = passwdBox.getText().toString();
         return true;
     }
 }
