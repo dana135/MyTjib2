@@ -1,14 +1,15 @@
 package com.androidapp.mytjib;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.androidapp.mytjib.admin_panel.venues.Venue;
 import com.androidapp.mytjib.network.ApiService;
 import com.androidapp.mytjib.network.RetrofitInstance;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,12 +22,14 @@ public class Repository {
     private MutableLiveData<List<Event>> eventsLive;
     private MutableLiveData<List<Ticket>> ticketsLive;
     private MutableLiveData<Event> currentEventLive;
+    private MutableLiveData<Event> addEventLive;
     private MutableLiveData<List<Venue>> venuesLive;
     private int currentEventId;
 
     public Repository() {
         this.eventsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
+        this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.ticketsLive = new MutableLiveData<>();
     }
@@ -88,7 +91,7 @@ public class Repository {
         currentEventId = id;
     }
 
-    public void getVenuesFromServer(){
+    public LiveData<List<Venue>> getVenuesFromServer(){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
@@ -107,6 +110,7 @@ public class Repository {
 
             }
         });
+        return venuesLive;
     }
 
     public LiveData<List<Ticket>> getTicketsFromServer() {
@@ -130,4 +134,84 @@ public class Repository {
         });
         return ticketsLive;
     }
+
+    public void editEvent(Event event) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.editEvent(currentEventId, event);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public void deleteEvent() {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.deleteEvent(currentEventId);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public LiveData<Event> addEvent(Event event) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Event> call = service.addEvent(event);
+
+        call.enqueue(new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                Log.d("STATE", response.message());
+                Event newEvent = response.body();
+                addEventLive.postValue(newEvent);
+            }
+
+            @Override
+            public void onFailure(Call<Event> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+        return addEventLive;
+    }
+
+    public void addVenue(Venue venue) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.addVenue(venue);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
 }

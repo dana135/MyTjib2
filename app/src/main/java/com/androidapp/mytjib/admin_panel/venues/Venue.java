@@ -1,6 +1,4 @@
-package com.androidapp.mytjib;
-
-import java.util.List;
+package com.androidapp.mytjib.admin_panel.venues;
 
 public class Venue {
 
@@ -8,7 +6,6 @@ public class Venue {
     /**
      * id : 1
      * venueName : SK Olympic Handball Gymnasium
-     * seats : [["GROUND","2503"],["FLOOR1","1000"],["FLOOR2","1500"]]
      * location : Seoul
      * capacity : 5003
      */
@@ -17,7 +14,13 @@ public class Venue {
     private String venueName;
     private String location;
     private int capacity;
-    private List<List<String>> seats;
+
+    public Venue(String venueName, String location, int capacity) {
+    //    this.id = 0;
+        this.venueName = venueName;
+        this.location = location;
+        this.capacity = capacity;
+    }
 
     public int getId() {
         return id;
@@ -49,13 +52,5 @@ public class Venue {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    public List<List<String>> getSeats() {
-        return seats;
-    }
-
-    public void setSeats(List<List<String>> seats) {
-        this.seats = seats;
     }
 }

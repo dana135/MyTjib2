@@ -1,20 +1,19 @@
-package com.androidapp.mytjib.events;
-
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+package com.androidapp.mytjib.admin_panel.events;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
@@ -22,37 +21,34 @@ import com.androidapp.mytjib.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventsFragment extends Fragment {
+public class EditEventsFragment extends Fragment {
 
-    private EventsViewModel mViewModel;
+    private EditEventsViewModel mViewModel;
     private RecyclerView recycler;
     private View view;
 
-    public static EventsFragment newInstance() {
-        return new EventsFragment();
+    public static EditEventsFragment newInstance() {
+        return new EditEventsFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        FragmentTransaction tr = getFragmentManager().beginTransaction();
-        tr.replace(R.id.container, this);
-        tr.commit();
-        return inflater.inflate(R.layout.events_fragment, container, false);
+        return inflater.inflate(R.layout.edit_events_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(EditEventsViewModel.class);
 
         List<Event> events = new ArrayList<>();
-        final EventsAdapter adapter = new EventsAdapter(getContext(), new EventsAdapter.ClickListener() {
+        final EditEventsAdapter adapter = new EditEventsAdapter(getContext(), new EditEventsAdapter.ClickListener() {
             @Override
             public void onEventClicked(int id) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", id);
-            //    Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_editEventsFragment_to_editEventDetailsFragment, bundle);
             }
         });
         recycler.setAdapter(adapter);
@@ -65,6 +61,22 @@ public class EventsFragment extends Fragment {
                 adapter.setEvents(events);
             }
         });
+
+        Button btnAddEvent = view.findViewById(R.id.btn_add_event);
+        btnAddEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.addEventFragment);
+            }
+        });
+
+        Button btnAddVenue = view.findViewById(R.id.btn_add_venue);
+        btnAddVenue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.addVenueFragment);
+            }
+        });
     }
 
     @Override
@@ -74,5 +86,4 @@ public class EventsFragment extends Fragment {
         this.view = view;
         recycler = view.findViewById(R.id.edit_events_recycler);
     }
-
 }

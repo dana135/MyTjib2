@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,13 +50,13 @@ public class EventDetailsFragment extends Fragment {
             }
         });
 
-        Button button = view.findViewById(R.id.event_details_buy);
+        Button button = view.findViewById(R.id.buy_tickets);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", id);
-                Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_event_buy_tickets, bundle);
+       //         Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_event_buy_tickets, bundle);
             }
         });
     }

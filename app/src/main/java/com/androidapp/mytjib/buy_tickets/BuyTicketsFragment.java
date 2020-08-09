@@ -2,7 +2,6 @@ package com.androidapp.mytjib.buy_tickets;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -15,9 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.Ticket;
 import com.androidapp.mytjib.event_details.EventDetailsViewModel;
@@ -75,6 +72,6 @@ public class BuyTicketsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_buy_tickets, container, false);
+        return inflater.inflate(R.layout.buy_tickets_fragment, container, false);
     }
 }

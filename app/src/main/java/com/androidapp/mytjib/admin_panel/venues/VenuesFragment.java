@@ -1,4 +1,4 @@
-package com.androidapp.mytjib.venues;
+package com.androidapp.mytjib.admin_panel.venues;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.mytjib.R;
-import com.androidapp.mytjib.Venue;
 
 
 import java.util.ArrayList;

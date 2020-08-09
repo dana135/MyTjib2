@@ -1,5 +1,7 @@
 package com.androidapp.mytjib;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Event {
@@ -19,7 +21,16 @@ public class Event {
     private String eventType;
     private String image;
     private String venueName;
-    private List<Integer> dateAndTime;
+    private String dateAndTime;
+
+    public Event(String name, String eventType, String image, String venueName, String dateAndTime) {
+        this.id = 0;
+        this.name = name;
+        this.eventType = eventType;
+        this.image = image;
+        this.venueName = venueName;
+        this.dateAndTime = dateAndTime;
+    }
 
     public int getId() {
         return id;
@@ -61,13 +72,14 @@ public class Event {
         this.venueName = venueName;
     }
 
-    public List<Integer> getDateAndTime() {
+    public String getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(List<Integer> dateAndTime) {
+    public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
+
 }
 
 

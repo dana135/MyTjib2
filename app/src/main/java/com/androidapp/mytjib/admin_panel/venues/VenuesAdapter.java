@@ -1,4 +1,4 @@
-package com.androidapp.mytjib.venues;
+package com.androidapp.mytjib.admin_panel.venues;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,10 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
-import com.androidapp.mytjib.Venue;
-import com.androidapp.mytjib.events.EventsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +38,6 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
         String venueDetails = "";
         venueDetails += "ID: " + venue.getId() + "\n";
         venueDetails += "Name: " + venue.getVenueName() + "\n";
-        venueDetails += "Seats: " + venue.getSeats() + "\n";
         venueDetails += "Location: " + venue.getLocation() + "\n";
         venueDetails += "Capacity: " + venue.getCapacity() + "\n";
 

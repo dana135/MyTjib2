@@ -41,7 +41,7 @@ public class LoginFragment extends Fragment {
     private void login() {
         if (checkCreds()) {
             Bundle bundle = new Bundle();
-            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_eventsFragment, bundle);
+      //      Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_eventsFragment, bundle);
         } else {
             Context context = getContext();
             CharSequence text = "User does not exist - please try again or sign up";

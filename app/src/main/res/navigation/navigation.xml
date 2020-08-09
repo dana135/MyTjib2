@@ -3,47 +3,96 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/editEventsFragment" >
 
     <fragment
-        android:id="@+id/eventsFragment"
-        android:name="com.androidapp.mytjib.events.EventsFragment"
-        android:label="events_fragment"
-        tools:layout="@layout/events_fragment" >
+        android:id="@+id/editEventsFragment"
+        android:name="com.androidapp.mytjib.admin_panel.events.EditEventsFragment"
+        android:label="edit_events_fragment"
+        tools:layout="@layout/edit_events_fragment" >
         <action
-            android:id="@+id/action_eventsFragment_to_eventDetailsFragment"
-            app:destination="@id/eventDetailsFragment" />
+            android:id="@+id/action_editEventsFragment_to_editEventDetailsFragment"
+            app:destination="@id/editEventDetailsFragment" />
+        <action
+            android:id="@+id/action_editEventsFragment_to_addVenueFragment"
+            app:destination="@id/addVenueFragment" />
+        <action
+            android:id="@+id/action_editEventsFragment_to_addEventFragment"
+            app:destination="@id/addEventFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/eventDetailsFragment"
-        android:name="com.androidapp.mytjib.event_details.EventDetailsFragment"
-        android:label="event_details_fragment"
-        tools:layout="@layout/event_details_fragment" >
+        android:id="@+id/editEventDetailsFragment"
+        android:name="com.androidapp.mytjib.admin_panel.events.EditEventDetailsFragment"
+        android:label="edit_event_details_fragment"
+        tools:layout="@layout/edit_event_details_fragment" >
         <argument
             android:name="id"
             app:argType="integer"
             android:defaultValue="-1" />
         <action
-            android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
-            app:destination="@id/event_buy_tickets" />
+            android:id="@+id/action_editEventDetailsFragment_to_venuesFragment"
+            app:destination="@id/venuesFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/event_buy_tickets"
-        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
-        android:label="fragment_event_buy_tickets"
-        tools:layout="@layout/fragment_event_buy_tickets" >
-        <argument
-            android:name="id"
-            app:argType="integer"
-            android:defaultValue="-1" />
-    </fragment>
+        android:id="@+id/venuesFragment"
+        android:name="com.androidapp.mytjib.admin_panel.venues.VenuesFragment"
+        android:label="venues_fragment"
+        tools:layout="@layout/venues_fragment" />
+
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.androidapp.mytjib.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_eventsFragment"
-            app:destination="@id/eventsFragment" />
-    </fragment>
+        android:id="@+id/addVenueFragment"
+        android:name="com.androidapp.mytjib.admin_panel.venues.AddVenueFragment"
+        android:label="AddVenueFragment" />
+
+    <fragment
+        android:id="@+id/addEventFragment"
+        android:name="com.androidapp.mytjib.admin_panel.events.AddEventFragment"
+        android:label="AddEventFragment" />
+
+    <!--
+        <fragment
+            android:id="@+id/eventsFragment"
+            android:name="com.androidapp.mytjib.events.EventsFragment"
+            android:label="events_fragment"
+            tools:layout="@layout/events_fragment" >
+            <action
+                android:id="@+id/action_eventsFragment_to_eventDetailsFragment"
+                app:destination="@id/eventDetailsFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/eventDetailsFragment"
+            android:name="com.androidapp.mytjib.event_details.EventDetailsFragment"
+            android:label="event_details_fragment"
+            tools:layout="@layout/event_details_fragment" >
+            <argument
+                android:name="id"
+                app:argType="integer"
+                android:defaultValue="-1" />
+            <action
+                android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
+                app:destination="@id/event_buy_tickets" />
+        </fragment>
+        <fragment
+            android:id="@+id/event_buy_tickets"
+            android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
+            android:label="buy_tickets_fragment"
+            tools:layout="@layout/buy_tickets_fragment" >
+            <argument
+                android:name="id"
+                app:argType="integer"
+                android:defaultValue="-1" />
+        </fragment>
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.androidapp.mytjib.login.LoginFragment"
+            android:label="fragment_login"
+            tools:layout="@layout/fragment_login" >
+            <action
+                android:id="@+id/action_loginFragment_to_eventsFragment"
+                app:destination="@id/eventsFragment" />
+        </fragment>
+        -->
 </navigation>

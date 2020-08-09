@@ -45,6 +45,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit: $version_retrofit"
     implementation "com.squareup.retrofit2:converter-scalars:$version_retrofit"
 
+    // Http logging interceptor
+    implementation "com.squareup.okhttp3:logging-interceptor:4.8.1"
+
     // moshi, converts json to object
     implementation "com.squareup.moshi:moshi:$version_moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"

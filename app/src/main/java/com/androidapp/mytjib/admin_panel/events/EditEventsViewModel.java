@@ -1,25 +1,24 @@
-package com.androidapp.mytjib.venues;
+package com.androidapp.mytjib.admin_panel.events;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.Repository;
-import com.androidapp.mytjib.Venue;
 
 import java.util.List;
 
-public class VenuesViewModel extends ViewModel {
-
+public class EditEventsViewModel extends ViewModel {
     // TODO: Implement the ViewModel
     private Repository repository;
 
     public void createRepository(){
         repository  = new Repository();
-        repository.getVenuesFromServer();
+        repository.getEventsFromServer();
     }
 
-    public LiveData<List<Venue>> getVenues(){
-        return repository.getVenuesLive();
+    public LiveData<List<Event>> getEvents(){
+        return repository.getEventsLive();
     }
 
 }
