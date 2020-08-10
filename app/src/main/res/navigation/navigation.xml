@@ -49,7 +49,23 @@
     <fragment
         android:id="@+id/addEventFragment"
         android:name="com.androidapp.mytjib.admin_panel.events.AddEventFragment"
-        android:label="AddEventFragment" />
+        android:label="AddEventFragment" >
+        <action
+            android:id="@+id/action_addEventFragment_to_addTicketsFragment"
+            app:destination="@id/addTicketsFragment" />
+    </fragment>
+    <fragment
+
+        android:id="@+id/addTicketsFragment"
+        android:name="com.androidapp.mytjib.admin_panel.tickets.AddTicketsFragment"
+        android:label="AddTicketsFragment" >
+        <action
+            android:id="@+id/action_addTicketsFragment_to_editEventsFragment"
+            app:destination="@id/editEventsFragment" />
+        <action
+            android:id="@+id/action_addTicketsFragment_self"
+            app:destination="@id/addTicketsFragment" />
+    </fragment>
 
     <!--
         <fragment

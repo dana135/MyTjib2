@@ -15,6 +15,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Path;
 
 
 public class Repository {
@@ -193,6 +194,25 @@ public class Repository {
             }
         });
         return addEventLive;
+    }
+
+    public void addEventTickets(int numOfTickets, String section, int price,  boolean marked){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.addEventTickets(currentEventId, numOfTickets, section, price, marked);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
     }
 
     public void addVenue(Venue venue) {

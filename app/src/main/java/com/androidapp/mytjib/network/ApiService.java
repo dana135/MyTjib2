@@ -8,9 +8,12 @@ import com.androidapp.mytjib.Ticket;
 
 import java.util.List;
 
+import kotlin.ParameterName;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -44,6 +47,11 @@ public interface ApiService {
 
     @PUT("events/{id}/")
     Call<Void> editEvent(@Path("id") int id, @Body Event event);
+
+    @FormUrlEncoded
+    @PUT("events/{id}/addtickets")
+    Call<Void> addEventTickets(@Path("id") int id, @Field("numOfTickets") int numOfTickets, @Field("section") String section,
+                               @Field("price") int price, @Field("marked") boolean marked);
 
     @POST("events")
     Call<Event> addEvent(@Body Event event);

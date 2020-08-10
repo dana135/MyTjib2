@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
@@ -37,7 +38,6 @@ public class AddEventFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.add_event_fragment, container, false);
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -63,8 +63,12 @@ public class AddEventFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewModel.addEvent(addNewEvent());
-            // to tickets   Navigation.findNavController(view).navigate(R.id.editEventsFragment);
+                mViewModel.addEvent(addNewEvent()).observe(getViewLifecycleOwner(), new Observer<Event>() {
+                    @Override
+                    public void onChanged(Event event) {
+                        setEvent(event);
+                    }
+                });
             }
         });
 
@@ -95,6 +99,12 @@ public class AddEventFragment extends Fragment {
         String image = eventImage.getText().toString();
 
         return new Event(name, type, image, venue, time);
+    }
+
+    private void setEvent(Event event) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", event.getId());
+        Navigation.findNavController(view).navigate(R.id.addTicketsFragment, bundle);
     }
 
 }
