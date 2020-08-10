@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.androidapp.mytjib.Event;
-import com.androidapp.mytjib.Repository;
+import com.androidapp.mytjib.network.Repository;
 
 import java.util.List;
 

@@ -15,7 +15,12 @@ public class Customer {
     private String username;
     private String password;
     private String email;
-    private ShippingDetails shippingDetails;
+
+    public Customer(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     public int getId() {
         return id;
@@ -49,11 +54,4 @@ public class Customer {
         this.email = email;
     }
 
-    public Object getShippingDetails() {
-        return shippingDetails;
-    }
-
-    public void setShippingDetails(ShippingDetails shippingDetails) {
-        this.shippingDetails = shippingDetails;
-    }
 }

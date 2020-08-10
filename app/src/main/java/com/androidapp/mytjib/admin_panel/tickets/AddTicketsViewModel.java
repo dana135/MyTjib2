@@ -2,8 +2,7 @@ package com.androidapp.mytjib.admin_panel.tickets;
 
 import androidx.lifecycle.ViewModel;
 
-import com.androidapp.mytjib.Event;
-import com.androidapp.mytjib.Repository;
+import com.androidapp.mytjib.network.Repository;
 
 public class AddTicketsViewModel extends ViewModel {
 

@@ -2,9 +2,7 @@ package com.androidapp.mytjib.admin_panel.venues;
 
 import androidx.lifecycle.ViewModel;
 
-import com.androidapp.mytjib.Repository;
-
-import java.util.List;
+import com.androidapp.mytjib.network.Repository;
 
 public class AddVenueViewModel extends ViewModel {
 

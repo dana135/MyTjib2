@@ -37,10 +37,10 @@ public interface ApiService {
     Call<List<Customer>> getCustomers();
 
     @GET("customers/login?email={email}&password={password}}")
-    Call<List<Customer>> getCustomer(@Path("email") String email, @Path("password") String password);
+    Call<Customer> getCustomer(@Path("email") String email, @Path("password") String password);
 
     @GET("admins/login?email={email}&password={password}")
-    Call<List<Admin>> getAdmin(@Path("email") String email, @Path("password") String password);
+    Call<Admin> getAdmin(@Path("email") String email, @Path("password") String password);
 
     @DELETE("events/{id}")
     Call<Void> deleteEvent(@Path("id") int id);
@@ -58,5 +58,8 @@ public interface ApiService {
 
     @POST("venues")
     Call<Void> addVenue(@Body Venue venue);
+
+    @POST("customers")
+    Call<Void> customerSignUp(@Body Customer customer);
 
 }

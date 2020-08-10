@@ -1,4 +1,4 @@
-package com.androidapp.mytjib;
+package com.androidapp.mytjib.network;
 
 
 import android.util.Log;
@@ -6,6 +6,10 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.androidapp.mytjib.Customer;
+import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.Ticket;
+import com.androidapp.mytjib.admin_panel.Admin;
 import com.androidapp.mytjib.admin_panel.venues.Venue;
 import com.androidapp.mytjib.network.ApiService;
 import com.androidapp.mytjib.network.RetrofitInstance;
@@ -20,6 +24,8 @@ import retrofit2.http.Path;
 
 public class Repository {
 
+    private MutableLiveData<Admin> currentAdminLive;
+    private  MutableLiveData<Customer> currentCustomerLive;
     private MutableLiveData<List<Event>> eventsLive;
     private MutableLiveData<List<Ticket>> ticketsLive;
     private MutableLiveData<Event> currentEventLive;
@@ -28,11 +34,57 @@ public class Repository {
     private int currentEventId;
 
     public Repository() {
+        this.currentAdminLive = new MutableLiveData<>();
+        this.currentCustomerLive = new MutableLiveData<>();
         this.eventsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.ticketsLive = new MutableLiveData<>();
+    }
+
+    public LiveData<Admin> getAdminFromServer(String email, String password){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Admin> call = service.getAdmin(email, password);
+
+        call.enqueue(new Callback<Admin>() {
+
+            @Override
+            public void onResponse(Call<Admin> call, Response<Admin> response) {
+                Admin admin = response.body();
+                currentAdminLive.postValue(admin);
+            }
+
+            @Override
+            public void onFailure(Call<Admin> call, Throwable t) {
+
+            }
+        });
+        return currentAdminLive;
+    }
+
+    public LiveData<Customer> getCustomerFromServer(String email, String password){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Customer> call = service.getCustomer(email, password);
+
+        call.enqueue(new Callback<Customer>() {
+
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                Customer customer = response.body();
+                currentCustomerLive.postValue(customer);
+            }
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+
+            }
+        });
+        return currentCustomerLive;
     }
 
     public MutableLiveData<List<Event>> getEventsLive() {
@@ -220,6 +272,25 @@ public class Repository {
                 getRetrofitInstance().create(ApiService.class);
 
         Call<Void> call = service.addVenue(venue);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public void customerSignUp(Customer customer) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.customerSignUp(customer);
 
         call.enqueue(new Callback<Void>() {
             @Override
