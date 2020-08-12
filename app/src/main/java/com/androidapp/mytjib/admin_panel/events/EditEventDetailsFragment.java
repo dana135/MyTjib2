@@ -20,7 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.admin_panel.venues.Venue;
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.R;
 import com.bumptech.glide.Glide;
 

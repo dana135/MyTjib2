@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation"
+    android:id="@+id/admin_navigation"
     app:startDestination="@id/editEventsFragment">
 
     <!--  admin -->
@@ -68,41 +68,5 @@
             android:id="@+id/action_addTicketsFragment_self"
             app:destination="@id/addTicketsFragment" />
     </fragment>
-
-
-    <!--  user -->
-        <fragment
-            android:id="@+id/eventsFragment"
-            android:name="com.androidapp.mytjib.events.EventsFragment"
-            android:label="events_fragment"
-            tools:layout="@layout/events_fragment" >
-            <action
-                android:id="@+id/action_eventsFragment_to_eventDetailsFragment"
-                app:destination="@id/eventDetailsFragment" />
-        </fragment>
-
-        <fragment
-            android:id="@+id/eventDetailsFragment"
-            android:name="com.androidapp.mytjib.event_details.EventDetailsFragment"
-            android:label="event_details_fragment"
-            tools:layout="@layout/event_details_fragment" >
-            <argument
-                android:name="id"
-                app:argType="integer"
-                android:defaultValue="-1" />
-            <action
-                android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
-                app:destination="@id/event_buy_tickets" />
-        </fragment>
-        <fragment
-            android:id="@+id/event_buy_tickets"
-            android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
-            android:label="buy_tickets_fragment"
-            tools:layout="@layout/buy_tickets_fragment" >
-            <argument
-                android:name="id"
-                app:argType="integer"
-                android:defaultValue="-1" />
-        </fragment>
 
 </navigation>

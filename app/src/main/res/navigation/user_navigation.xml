@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_navigation"
+    app:startDestination="@id/eventsFragment">
+
+    <!--  user -->
+    <fragment
+        android:id="@+id/eventsFragment"
+        android:name="com.androidapp.mytjib.events.EventsFragment"
+        android:label="events_fragment"
+        tools:layout="@layout/events_fragment" >
+        <action
+            android:id="@+id/action_eventsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+        <action
+            android:id="@+id/action_eventsFragment_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.androidapp.mytjib.event_details.EventDetailsFragment"
+        android:label="event_details_fragment"
+        tools:layout="@layout/event_details_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
+            app:destination="@id/event_buy_tickets" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_buyTicketsFragment2"
+            app:destination="@id/buyTicketsFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/event_buy_tickets"
+        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
+        android:label="buy_tickets_fragment"
+        tools:layout="@layout/buy_tickets_fragment" >
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_event_buy_tickets_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myAccountFragment"
+        android:name="com.androidapp.mytjib.customer.MyAccountFragment"
+        android:label="MyAccountFragment" />
+    <fragment
+        android:id="@+id/buyTicketsFragment2"
+        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment2"
+        android:label="BuyTicketsFragment2" />
+
+</navigation>

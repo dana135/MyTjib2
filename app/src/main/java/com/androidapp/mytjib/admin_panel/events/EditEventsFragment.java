@@ -15,7 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.R;
 
 import java.util.ArrayList;

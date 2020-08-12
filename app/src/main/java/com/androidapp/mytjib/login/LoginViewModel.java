@@ -3,7 +3,7 @@ package com.androidapp.mytjib.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.androidapp.mytjib.Customer;
+import com.androidapp.mytjib.customer.Customer;
 import com.androidapp.mytjib.admin_panel.Admin;
 import com.androidapp.mytjib.network.Repository;
 

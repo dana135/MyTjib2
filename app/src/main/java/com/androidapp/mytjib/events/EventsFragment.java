@@ -1,6 +1,5 @@
 package com.androidapp.mytjib.events;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -9,21 +8,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidapp.mytjib.Event;
 import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.login.UserActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventsFragment extends Fragment {
 
+    private int userId;
     private EventsViewModel mViewModel;
     private RecyclerView recycler;
     private View view;
@@ -35,15 +37,19 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        FragmentTransaction tr = getFragmentManager().beginTransaction();
-        tr.replace(R.id.container, this);
-        tr.commit();
+   //     FragmentTransaction tr = getFragmentManager().beginTransaction();
+   //     tr.replace(R.id.container, this);
+   //     tr.commit();
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.events_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        userId = ((UserActivity) getActivity()).getUserId();
+
         mViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
 
         List<Event> events = new ArrayList<>();
@@ -51,8 +57,9 @@ public class EventsFragment extends Fragment {
             @Override
             public void onEventClicked(int id) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("id", id);
-            //    Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
+                bundle.putInt("eventId", id);
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
             }
         });
         recycler.setAdapter(adapter);
@@ -73,6 +80,17 @@ public class EventsFragment extends Fragment {
 
         this.view = view;
         recycler = view.findViewById(R.id.edit_events_recycler);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_myaccount:
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_myAccountFragment, bundle);
+        }
+        return true;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.androidapp.mytjib;
+package com.androidapp.mytjib.events;
 
 import com.google.gson.annotations.SerializedName;
 

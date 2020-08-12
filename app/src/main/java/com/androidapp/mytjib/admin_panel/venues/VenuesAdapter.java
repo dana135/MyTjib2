@@ -41,8 +41,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
         venueDetails += "Location: " + venue.getLocation() + "\n";
         venueDetails += "Capacity: " + venue.getCapacity() + "\n";
 
-        holder.nameTextView.setText(venueDetails);
-
+        holder.detailsTextView.setText(venueDetails);
     }
 
     @Override
@@ -57,11 +56,11 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView nameTextView;
+        public final TextView detailsTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.venue_details);
+            detailsTextView = itemView.findViewById(R.id.venue_details);
         }
     }
 

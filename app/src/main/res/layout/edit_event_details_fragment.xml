@@ -124,7 +124,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="163dp"
         android:text="@string/venue_details"
-        android:textColor="@color/DarkBlue"
+        android:textColor="@color/darkBlue"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

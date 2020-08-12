@@ -3,6 +3,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="SkyBlue">#ffcc33</color>
-    <color name="DarkBlue">#00008B</color>
+    <color name="skyBlue">#87ceeb</color>
+    <color name="darkBlue">#00008B</color>
+    <color name="royalBlue">#4169e1</color>
+    <color name="graySeat">#808080</color>
+    <color name="greenSeat">#00FF7F</color>
 </resources>

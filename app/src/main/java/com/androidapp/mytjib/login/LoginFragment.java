@@ -1,5 +1,6 @@
 package com.androidapp.mytjib.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import com.androidapp.mytjib.Customer;
+import com.androidapp.mytjib.customer.Customer;
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.admin_panel.Admin;
 
@@ -64,33 +65,52 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                adminLogin(email, password);
-                if(admin == null)
-                    customerLogin(email, password);
-                if(customer == null)
-                    Toast.makeText(getContext(), "Incorrect email or password" , Toast.LENGTH_LONG).show();
+
+                mViewModel.getAdmin(email, password).observe(getViewLifecycleOwner(), new Observer<Admin>() {
+                    @Override
+                    public void onChanged(Admin ad) {
+                        adminLogin(ad);
+                    }
+                });
+                mViewModel.getCustomer(email, password).observe(getViewLifecycleOwner(), new Observer<Customer>() {
+                    @Override
+                    public void onChanged(Customer cu) {
+                        customerLogin(cu);
+                    }
+                });
+
             }
         });
 
     }
 
-    private void adminLogin(String email, String password) {
-        mViewModel.getAdmin(email, password).observe(getViewLifecycleOwner(), new Observer<Admin>() {
-            @Override
-            public void onChanged(Admin ad) {
-                admin = ad;
-            }
-        });
+    private void adminLogin(Admin ad) {
+        admin = ad;
+        if(admin != null){
+            Intent intent = new Intent(getActivity(), AdminActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }
+        else return;
     }
 
-    private void customerLogin(String email, String password) {
-        mViewModel.getCustomer(email, password).observe(getViewLifecycleOwner(), new Observer<Customer>() {
-            @Override
-            public void onChanged(Customer cu) {
-                customer = cu;
-            }
-        });
-    }
+    private void customerLogin(Customer cu) {
+        customer = cu;
+        if(customer != null){
+            Bundle bundle = new Bundle();
+            bundle.putInt("userId", customer.getId());
 
+            Intent intent = new Intent(getActivity(), UserActivity.class);
+            intent.putExtras(bundle);
+
+            startActivity(intent);
+            getActivity().finish();
+        }
+        else{
+            if(customer == null & admin == null)
+                Toast.makeText(getContext(), "Incorrect email or password" , Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
 
 }

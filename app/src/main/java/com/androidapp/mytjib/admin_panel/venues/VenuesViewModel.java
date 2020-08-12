@@ -9,7 +9,6 @@ import java.util.List;
 
 public class VenuesViewModel extends ViewModel {
 
-    // TODO: Implement the ViewModel
     private Repository repository;
 
     public void createRepository(){

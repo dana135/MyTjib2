@@ -8,20 +8,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidapp.mytjib.Event;
+import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.R;
 import com.bumptech.glide.Glide;
 
 public class EventDetailsFragment extends Fragment {
 
+    private int userId;
     private EventDetailsViewModel mViewModel;
     private View view;
 
@@ -32,6 +35,7 @@ public class EventDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.event_details_fragment, container, false);
     }
 
@@ -41,8 +45,11 @@ public class EventDetailsFragment extends Fragment {
         view = getView();
         mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
 
-        final int id = getArguments().getInt("id");
-        mViewModel.createRepository(id);
+        final int eventId = getArguments().getInt("eventId");
+        final int userId = getArguments().getInt("userId");
+        this.userId = userId;
+
+        mViewModel.createRepository(eventId);
         mViewModel.getEventDetails().observe(getViewLifecycleOwner(), new Observer<Event>() {
             @Override
             public void onChanged(Event event) {
@@ -55,8 +62,9 @@ public class EventDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("id", id);
-       //         Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_event_buy_tickets, bundle);
+                bundle.putInt("eventId", eventId);
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_buyTicketsFragment2, bundle);
             }
         });
     }
@@ -68,6 +76,17 @@ public class EventDetailsFragment extends Fragment {
                 .load(event.getImage()) // image url
                 .into(imageView);  // imageview object
         nameView.setText(event.getName());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_myaccount:
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.action_eventDetailsFragment_to_myAccountFragment, bundle);
+        }
+        return true;
     }
 
 }

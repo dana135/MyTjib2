@@ -6,20 +6,19 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.androidapp.mytjib.Customer;
-import com.androidapp.mytjib.Event;
-import com.androidapp.mytjib.Ticket;
+import com.androidapp.mytjib.customer.Customer;
+import com.androidapp.mytjib.customer.Order;
+import com.androidapp.mytjib.customer.ShippingDetails;
+import com.androidapp.mytjib.events.Event;
+import com.androidapp.mytjib.buy_tickets.Ticket;
 import com.androidapp.mytjib.admin_panel.Admin;
 import com.androidapp.mytjib.admin_panel.venues.Venue;
-import com.androidapp.mytjib.network.ApiService;
-import com.androidapp.mytjib.network.RetrofitInstance;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Path;
 
 
 public class Repository {
@@ -31,16 +30,18 @@ public class Repository {
     private MutableLiveData<Event> currentEventLive;
     private MutableLiveData<Event> addEventLive;
     private MutableLiveData<List<Venue>> venuesLive;
+    private MutableLiveData<List<Order>> orderHistoryLive;
     private int currentEventId;
 
     public Repository() {
         this.currentAdminLive = new MutableLiveData<>();
         this.currentCustomerLive = new MutableLiveData<>();
         this.eventsLive = new MutableLiveData<>();
+        this.ticketsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
-        this.ticketsLive = new MutableLiveData<>();
+        this.orderHistoryLive = new MutableLiveData<>();
     }
 
     public LiveData<Admin> getAdminFromServer(String email, String password){
@@ -303,6 +304,47 @@ public class Repository {
                 Log.d("STATE", "failure");
             }
         });
+    }
+
+    public void checkout(int userId, List<Integer> ticketIds, ShippingDetails shipping) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.checkout(userId, ticketIds, shipping);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("STATE", response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public LiveData<List<Order>> getOrderHistoryFromServer(int userId){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Order>> call = service.getOrderHistory(userId);
+
+        call.enqueue(new Callback<List<Order>>() {
+
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                List<Order> orders = response.body();
+                orderHistoryLive.postValue(orders);
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+
+            }
+        });
+        return orderHistoryLive;
     }
 
 }

@@ -1,13 +1,12 @@
-package com.androidapp.mytjib;
+package com.androidapp.mytjib.customer;
 
 public class Customer {
-
 
     /**
      * id : 6
      * username : dushi
      * password : badukachi
-     * email : spellr@dush.com
+     * email : spell@bnd.com
      * shippingDetails : null
      */
 
