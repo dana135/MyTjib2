@@ -12,12 +12,16 @@ public class VenuesViewModel extends ViewModel {
     private Repository repository;
 
     public void createRepository(){
-        repository  = new Repository();
+        repository  = Repository.getInstance();
         repository.getVenuesFromServer();
     }
 
     public LiveData<List<Venue>> getVenues(){
         return repository.getVenuesLive();
+    }
+
+    public void addVenue(Venue venue){
+        repository.addVenue(venue);
     }
 
 }

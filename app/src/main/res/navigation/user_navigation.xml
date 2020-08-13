@@ -56,10 +56,33 @@
     <fragment
         android:id="@+id/myAccountFragment"
         android:name="com.androidapp.mytjib.customer.MyAccountFragment"
-        android:label="MyAccountFragment" />
+        android:label="MyAccountFragment" >
+        <action
+            android:id="@+id/action_myAccountFragment_self"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
     <fragment
         android:id="@+id/buyTicketsFragment2"
         android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment2"
-        android:label="BuyTicketsFragment2" />
+        android:label="BuyTicketsFragment2" >
+        <action
+            android:id="@+id/action_buyTicketsFragment2_to_shippingDetailsFragment"
+            app:destination="@id/shippingDetailsFragment" />
+        <action
+            android:id="@+id/action_buyTicketsFragment2_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shippingDetailsFragment"
+        android:name="com.androidapp.mytjib.buy_tickets.ShippingDetailsFragment"
+        android:label="ShippingDetailsFragment" >
+        <action
+            android:id="@+id/action_shippingDetailsFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
+        <action
+            android:id="@+id/action_shippingDetailsFragment_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
 
 </navigation>

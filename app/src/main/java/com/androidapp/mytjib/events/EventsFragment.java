@@ -1,5 +1,6 @@
 package com.androidapp.mytjib.events;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -37,9 +38,6 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-   //     FragmentTransaction tr = getFragmentManager().beginTransaction();
-   //     tr.replace(R.id.container, this);
-   //     tr.commit();
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.events_fragment, container, false);
     }

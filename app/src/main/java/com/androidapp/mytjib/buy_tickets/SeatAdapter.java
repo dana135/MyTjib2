@@ -1,6 +1,7 @@
 package com.androidapp.mytjib.buy_tickets;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,11 @@ import java.util.List;
 public class SeatAdapter extends BaseAdapter {
 
     public List<Ticket> tickets;
- //   public List<Ticket> selectedTickets;
-    public List<Integer> selectedTickets;
+    public List<Ticket> selectedTickets;
     public Context context;
 
     public SeatAdapter(Context context) {
-        this.selectedTickets = new ArrayList<>();
+        selectedTickets = new ArrayList<>();
         this.tickets = new ArrayList<>();
         this.context = context;
     }
@@ -65,19 +65,21 @@ public class SeatAdapter extends BaseAdapter {
     public void selectTicket(int i){
         Ticket t = tickets.get(i);
 
-        if(t.getStatus().equals("available")){
+        if(!t.getStatus().equals("unavailable") && !selectedTickets.contains(t)){
             t.setStatus("selected");
-            selectedTickets.add(tickets.get(i).getId());
+            selectedTickets.add(t);
         }
-        else if(t.getStatus().equals("selected")){
+        else if(!t.getStatus().equals("unavailable")){
             t.setStatus("available");
-            selectedTickets.remove(tickets.get(i));
+            selectedTickets.remove(t);
         }
         notifyDataSetChanged(); // refresh the UI
 
     }
 
-    public List<Integer> getSelectedTickets(){
-        return selectedTickets;
+    public ArrayList<Integer> getTicketIds(){
+       ArrayList<Integer> ticketIds = new ArrayList<>();
+       for(Ticket t : selectedTickets) ticketIds.add(t.getId());
+       return ticketIds;
     }
 }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.events.EventsViewModel;
 import com.bumptech.glide.Glide;
 
 public class EventDetailsFragment extends Fragment {
@@ -72,10 +73,19 @@ public class EventDetailsFragment extends Fragment {
     private void updateUi(Event event) {
         ImageView imageView = view.findViewById(R.id.event_details_image);
         TextView nameView = view.findViewById(R.id.event_details_name);
+        TextView detailsView = view.findViewById(R.id.event_details_fields);
+
         Glide.with(imageView)
                 .load(event.getImage()) // image url
                 .into(imageView);  // imageview object
+
         nameView.setText(event.getName());
+
+        String details = "";
+        details += "Event Type: " + event.getEventType() + "\n";
+        details += "Location: " + event.getVenueName() + "\n";
+        details += "Date and time: " + event.getDateAndTime() + "\n";
+        detailsView.setText(details);
     }
 
     @Override

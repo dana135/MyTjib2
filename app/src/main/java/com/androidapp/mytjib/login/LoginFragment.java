@@ -72,16 +72,24 @@ public class LoginFragment extends Fragment {
                         adminLogin(ad);
                     }
                 });
-                mViewModel.getCustomer(email, password).observe(getViewLifecycleOwner(), new Observer<Customer>() {
-                    @Override
-                    public void onChanged(Customer cu) {
-                        customerLogin(cu);
-                    }
-                });
+                    mViewModel.getCustomer(email, password, getContext()).observe(getViewLifecycleOwner(), new Observer<Customer>() {
+                        @Override
+                        public void onChanged(Customer cu) {
+                            customerLogin(cu);
+                         //   if(cu == null) showMessage();
+                        }
+                    });
 
             }
         });
 
+    }
+
+    private void showMessage() {
+        try{ Thread.sleep(2000); }
+        catch(InterruptedException e) {}
+        if(customer == null && admin == null)
+            Toast.makeText(getContext(), "Incorrect email or password" , Toast.LENGTH_SHORT).show();
     }
 
     private void adminLogin(Admin ad) {
@@ -106,11 +114,7 @@ public class LoginFragment extends Fragment {
             startActivity(intent);
             getActivity().finish();
         }
-        else{
-            if(customer == null & admin == null)
-                Toast.makeText(getContext(), "Incorrect email or password" , Toast.LENGTH_SHORT).show();
-            return;
-        }
+        else return;
     }
 
 }

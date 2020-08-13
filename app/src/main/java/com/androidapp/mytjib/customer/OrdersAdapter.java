@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.buy_tickets.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +36,17 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull OrdersAdapter.ViewHolder holder, int position) {
         final Order order = orders.get(position);
+        List<Ticket> orderTickets = order.getTickets();
 
         String orderDetails = "";
-        orderDetails += "Order Number: " + order.getOrderNum() + "\n";
-        orderDetails += "Price: " + order.getPrice() + "\n";
-        orderDetails += "Order Date: " + order.getOrderTime().toString() + "\n";
-        orderDetails += "Tickets: " + order.getTickets().toString() + "\n";
+        orderDetails += "Order Number: " + order.getOrderNum() + "\n\n";
+        orderDetails += "Total Price: " + order.getPrice() + "\n";
+        orderDetails += "Order Date: " + order.getOrderTime().toString() + "\n\n";
+        orderDetails += "Tickets: " + "\n\n";
+
+        for(int i=0; i<orderTickets.size(); i++){
+            orderDetails += orderTickets.get(i).toString()+ "\n";
+        }
 
         holder.detailsTextView.setText(orderDetails);
     }

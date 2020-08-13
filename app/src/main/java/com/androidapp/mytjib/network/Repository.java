@@ -1,7 +1,9 @@
 package com.androidapp.mytjib.network;
 
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,7 +26,7 @@ import retrofit2.Response;
 public class Repository {
 
     private MutableLiveData<Admin> currentAdminLive;
-    private  MutableLiveData<Customer> currentCustomerLive;
+    private MutableLiveData<Customer> currentCustomerLive;
     private MutableLiveData<List<Event>> eventsLive;
     private MutableLiveData<List<Ticket>> ticketsLive;
     private MutableLiveData<Event> currentEventLive;
@@ -33,7 +35,9 @@ public class Repository {
     private MutableLiveData<List<Order>> orderHistoryLive;
     private int currentEventId;
 
-    public Repository() {
+    static Repository repository = new Repository();
+
+    private Repository() {
         this.currentAdminLive = new MutableLiveData<>();
         this.currentCustomerLive = new MutableLiveData<>();
         this.eventsLive = new MutableLiveData<>();
@@ -43,6 +47,8 @@ public class Repository {
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
     }
+
+    public static Repository getInstance() { return repository; }
 
     public LiveData<Admin> getAdminFromServer(String email, String password){
         ApiService service = RetrofitInstance.
@@ -66,11 +72,35 @@ public class Repository {
         return currentAdminLive;
     }
 
-    public LiveData<Customer> getCustomerFromServer(String email, String password){
+    public LiveData<Customer> getCustomerFromServer(String email, String password, Context c){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
+        final Context context = c;
+
         Call<Customer> call = service.getCustomer(email, password);
+
+        call.enqueue(new Callback<Customer>() {
+
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                Customer customer = response.body();
+                currentCustomerLive.postValue(customer);
+                if(customer == null) Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+            }
+        });
+        return currentCustomerLive;
+    }
+
+    public LiveData<Customer> getCustomerByIdFromServer(int id){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Customer> call = service.getCustomerById(id);
 
         call.enqueue(new Callback<Customer>() {
 
@@ -94,6 +124,38 @@ public class Repository {
 
     public MutableLiveData<List<Venue>> getVenuesLive() {
         return venuesLive;
+    }
+
+    public LiveData<Event> getEventDetailsLive() {
+        return currentEventLive;
+    }
+
+    public void setEventId(int id) {
+        currentEventId = id;
+    }
+
+    public MutableLiveData<Customer> getCurrentCustomer() {
+        return currentCustomerLive;
+    }
+
+    public void setCurrentCustomer(int id) {
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Customer> call = service.getCustomerById(id);
+
+        call.enqueue(new Callback<Customer>() {
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                Customer customer = response.body();
+                currentCustomerLive.postValue(customer);
+            }
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
     }
 
     public void getEventsFromServer(){
@@ -135,14 +197,6 @@ public class Repository {
 
             }
         });
-    }
-
-    public LiveData<Event> getEventDetailsLive() {
-        return currentEventLive;
-    }
-
-    public void setEventId(int id) {
-        currentEventId = id;
     }
 
     public LiveData<List<Venue>> getVenuesFromServer(){
@@ -306,11 +360,11 @@ public class Repository {
         });
     }
 
-    public void checkout(int userId, List<Integer> ticketIds, ShippingDetails shipping) {
+    public void checkout(int userId, ShippingDetails shipping) {
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
-        Call<Void> call = service.checkout(userId, ticketIds, shipping);
+        Call<Void> call = service.checkout(userId, shipping);
 
         call.enqueue(new Callback<Void>() {
             @Override

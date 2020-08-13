@@ -2,6 +2,7 @@ package com.androidapp.mytjib.buy_tickets;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.navigation.Navigation;
 
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.event_details.EventDetailsViewModel;
+import com.androidapp.mytjib.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,16 @@ public class BuyTicketsFragment2 extends Fragment {
         });
 
         Button buyTickets = view.findViewById(R.id.buy_tickets_gridbtn);
+        buyTickets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", userId);
+                bundle.putInt("eventId", eventId);
+                bundle.putIntegerArrayList("ticketIds", adapter.getTicketIds());
+                Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_shippingDetailsFragment, bundle);
+            }
+        });
 
     }
 
@@ -88,7 +100,7 @@ public class BuyTicketsFragment2 extends Fragment {
             case R.id.menu_myaccount:
                 Bundle bundle = new Bundle();
                 bundle.putInt("userId", userId);
-         //fixnav       Navigation.findNavController(view).navigate(R.id.action_event_buy_tickets_to_myAccountFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_myAccountFragment, bundle);
         }
         return true;
     }

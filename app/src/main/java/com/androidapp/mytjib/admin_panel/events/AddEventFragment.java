@@ -25,7 +25,7 @@ import java.util.List;
 
 public class AddEventFragment extends Fragment {
 
-    private AddEventViewModel mViewModel;
+    private EditEventsViewModel mViewModel;
     private View view;
 
     public static AddEventFragment newInstance() {
@@ -42,7 +42,7 @@ public class AddEventFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         view = getView();
-        mViewModel = ViewModelProviders.of(this).get(AddEventViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(EditEventsViewModel.class);
 
         mViewModel.createRepository();
         mViewModel.getVenues().observe(getViewLifecycleOwner(), new Observer<List<Venue>>() {
@@ -103,6 +103,9 @@ public class AddEventFragment extends Fragment {
     private void setEvent(Event event) {
         Bundle bundle = new Bundle();
         bundle.putInt("id", event.getId());
+        bundle.putBoolean("standing", false);
+        bundle.putBoolean("sitting", false);
+        bundle.putBoolean("vip", false);
         Navigation.findNavController(view).navigate(R.id.addTicketsFragment, bundle);
     }
 

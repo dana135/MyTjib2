@@ -14,7 +14,7 @@
     <string name="sign_up"><u>Sign Up</u></string>
     <!-- Strings related to venue -->
     <string name="venue_details"><u>Venue Details...</u></string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <!-- Strings related to order -->
     <string name="order_history">Orders</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.androidapp.mytjib.customer;
 
+import java.util.List;
+
 public class ShippingDetails {
 
     /**
@@ -15,13 +17,15 @@ public class ShippingDetails {
     private String lastName;
     private String creditCard;
     private int creditExpiration;
+    private List<Integer> ticketIds;
 
-    public ShippingDetails(String firstName, String lastName, String creditCard, int creditExpiration) {
+    public ShippingDetails(String firstName, String lastName, String creditCard, int creditExpiration, List<Integer> ticketIds) {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.creditCard = creditCard;
         this.creditExpiration = creditExpiration;
+        this.ticketIds = ticketIds;
     }
 
     public int getId() {
@@ -62,5 +66,13 @@ public class ShippingDetails {
 
     public void setCreditExpiration(int creditExpiration) {
         this.creditExpiration = creditExpiration;
+    }
+
+    public List<Integer> getTicketIds() {
+        return ticketIds;
+    }
+
+    public void setTicketIds(List<Integer> ticketIds) {
+        this.ticketIds = ticketIds;
     }
 }

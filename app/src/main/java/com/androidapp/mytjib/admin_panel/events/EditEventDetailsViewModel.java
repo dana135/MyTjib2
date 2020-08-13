@@ -14,7 +14,7 @@ public class EditEventDetailsViewModel extends ViewModel {
     private Repository repository;
 
     public void createRepository(int id){
-        repository  = new Repository();
+        repository  = Repository.getInstance();
         repository.setEventId(id);
         repository.getEventDetailsFromServer();
     }
@@ -33,6 +33,10 @@ public class EditEventDetailsViewModel extends ViewModel {
 
     public LiveData<List<Venue>> getVenues(){
         return repository.getVenuesFromServer();
+    }
+
+    public void addEventTickets(int numOfTickets, String section, int price, boolean marked){
+        repository.addEventTickets(numOfTickets, section, price, marked);
     }
 
 }

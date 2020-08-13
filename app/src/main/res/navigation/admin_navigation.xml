@@ -59,7 +59,7 @@
     <fragment
 
         android:id="@+id/addTicketsFragment"
-        android:name="com.androidapp.mytjib.admin_panel.tickets.AddTicketsFragment"
+        android:name="com.androidapp.mytjib.admin_panel.events.AddTicketsFragment"
         android:label="AddTicketsFragment" >
         <action
             android:id="@+id/action_addTicketsFragment_to_editEventsFragment"

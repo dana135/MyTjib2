@@ -1,5 +1,7 @@
 package com.androidapp.mytjib.login;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,11 +14,11 @@ public class LoginViewModel extends ViewModel  {
     private Repository repository;
 
     public void createRepository(){
-        repository  = new Repository();
+        repository  = Repository.getInstance();;
     }
 
     public LiveData<Admin> getAdmin(String email, String password) { return repository.getAdminFromServer(email, password); }
-    public LiveData<Customer> getCustomer(String email, String password) { return repository.getCustomerFromServer(email, password); }
+    public LiveData<Customer> getCustomer(String email, String password, Context context) { return repository.getCustomerFromServer(email, password, context); }
     public void customerSignUp(Customer customer) { repository.customerSignUp(customer); }
 
 }

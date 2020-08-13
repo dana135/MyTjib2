@@ -35,7 +35,7 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenuesAdapter.ViewHolder
     public void onBindViewHolder(@NonNull VenuesAdapter.ViewHolder holder, int position) {
         final Venue venue = venues.get(position);
 
-        String venueDetails = "";
+        String venueDetails = "- VENUE -\n";
         venueDetails += "ID: " + venue.getId() + "\n";
         venueDetails += "Name: " + venue.getVenueName() + "\n";
         venueDetails += "Location: " + venue.getLocation() + "\n";

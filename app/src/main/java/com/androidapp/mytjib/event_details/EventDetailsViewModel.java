@@ -10,11 +10,11 @@ import com.androidapp.mytjib.buy_tickets.Ticket;
 import java.util.List;
 
 public class EventDetailsViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+
     private Repository repository;
 
     public void createRepository(int id){
-        repository  = new Repository();
+        repository  = Repository.getInstance();
         repository.setEventId(id);
         repository.getEventDetailsFromServer();
     }

@@ -38,6 +38,9 @@ public interface ApiService {
     @GET("customers/login")
     Call<Customer> getCustomer(@Query("email") String email, @Query("password") String password);
 
+    @GET("customers/{id}")
+    Call<Customer> getCustomerById(@Path("id") int id);
+
     @GET("/customers/{id}/orders")
     Call<List<Order>> getOrderHistory(@Path("id") int id);
 
@@ -56,7 +59,7 @@ public interface ApiService {
                                @Field("price") int price, @Field("marked") boolean marked);
 
     @PUT("customers/{id}/checkout")
-    Call<Void> checkout(@Path("id") int id, @Body List<Integer> ticketIds, @Body ShippingDetails shipping);
+    Call<Void> checkout(@Path("id") int userId, @Body ShippingDetails shipping);
 
     @POST("events")
     Call<Event> addEvent(@Body Event event);

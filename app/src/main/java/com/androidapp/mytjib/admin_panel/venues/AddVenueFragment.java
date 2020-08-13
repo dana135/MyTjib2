@@ -18,7 +18,7 @@ import com.androidapp.mytjib.R;
 
 public class AddVenueFragment extends Fragment {
 
-    private AddVenueViewModel mViewModel;
+    private VenuesViewModel mViewModel;
     private View view;
 
     public static AddVenueFragment newInstance() {
@@ -35,7 +35,7 @@ public class AddVenueFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         view = getView();
-        mViewModel = ViewModelProviders.of(this).get(AddVenueViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(VenuesViewModel.class);
 
         mViewModel.createRepository();
 
