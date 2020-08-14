@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.network.Repository;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.app_menu, menu);
+        inflater.inflate(R.menu.user_menu, menu);
         return true;
     }
 
@@ -41,6 +42,7 @@ public class UserActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.menu_logout:
+                Repository.getInstance().resetRepository();
                 Intent intent = new Intent(activity, LoginActivity.class);
                 startActivity(intent);
                 activity.finish();

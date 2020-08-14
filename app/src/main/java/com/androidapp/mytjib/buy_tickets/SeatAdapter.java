@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
@@ -18,12 +19,16 @@ import java.util.List;
 public class SeatAdapter extends BaseAdapter {
 
     public List<Ticket> tickets;
+    public List<Ticket> standingTickets;
+    public List<Ticket> vipTickets;
     public List<Ticket> selectedTickets;
     public Context context;
 
     public SeatAdapter(Context context) {
-        selectedTickets = new ArrayList<>();
         this.tickets = new ArrayList<>();
+        this.standingTickets = new ArrayList<>();
+        this.vipTickets = new ArrayList<>();
+        this.selectedTickets = new ArrayList<>();
         this.context = context;
     }
 
@@ -57,12 +62,42 @@ public class SeatAdapter extends BaseAdapter {
         return v;
     }
 
-    public void setTickets(List<Ticket> tickets){
-        this.tickets = tickets;
+    public void setTickets(List<Ticket> tickets) {
+        ArrayList<Ticket> sittingTickets = new ArrayList<>();
+        for(Ticket t : tickets) {
+            if(t.getSection().equals("SITTING")) sittingTickets.add(t);
+        }
+        this.tickets = sittingTickets;
         notifyDataSetChanged(); // refresh the UI
     }
 
-    public void selectTicket(int i){
+    public void setStandingTickets(List<Ticket> tickets) {
+        this.standingTickets = tickets;
+    }
+
+    public void setVipTickets(List<Ticket> tickets) {
+        this.vipTickets = tickets;
+    }
+
+    public void setTextViews(View sitting, View standing, View vip){
+        String sittingStr = "Section: SITTING ";
+        if(tickets.size() == 0) sittingStr += "--Unavailable--";
+        else sittingStr += ", Price: " + tickets.get(0).getPrice() + "₩";
+
+        String standingStr = "Section: STANDING ";
+        if(standingTickets.size() == 0) standingStr += "--Unavailable--";
+        else standingStr += ", Price: " + standingTickets.get(0).getPrice() + "₩";
+
+        String vipStr = "Section: VIP ";
+        if(vipTickets.size() == 0) vipStr += "--Unavailable--";
+        else vipStr += ", Price: " + vipTickets.get(0).getPrice() + "₩";
+
+        ((TextView)sitting).setText(sittingStr);
+        ((TextView)standing).setText(standingStr);
+        ((TextView)vip).setText(vipStr);
+    }
+
+    public void selectTicket(int i) {
         Ticket t = tickets.get(i);
 
         if(!t.getStatus().equals("unavailable") && !selectedTickets.contains(t)){
@@ -77,9 +112,35 @@ public class SeatAdapter extends BaseAdapter {
 
     }
 
+    public void selectStandingTickets(int numOfTickets) {
+        int toAdd = numOfTickets;
+        while(toAdd > 0){
+            Ticket t = standingTickets.remove(0);
+            selectedTickets.add(t);
+            t.setStatus("unavailable");
+            toAdd--;
+        }
+    }
+
+    public void selectVipTickets(int numOfTickets) {
+        int toAdd = numOfTickets;
+        while(toAdd > 0){
+            Ticket t = vipTickets.remove(0);
+            selectedTickets.add(t);
+            t.setStatus("unavailable");
+            toAdd--;
+        }
+    }
+
     public ArrayList<Integer> getTicketIds(){
        ArrayList<Integer> ticketIds = new ArrayList<>();
        for(Ticket t : selectedTickets) ticketIds.add(t.getId());
        return ticketIds;
+    }
+
+    public int getTotalPrice() {
+        int price = 0;
+        for(Ticket t : selectedTickets) price += t.getPrice();
+        return price;
     }
 }

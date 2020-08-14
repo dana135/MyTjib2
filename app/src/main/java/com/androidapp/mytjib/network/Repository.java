@@ -34,6 +34,7 @@ public class Repository {
     private MutableLiveData<List<Venue>> venuesLive;
     private MutableLiveData<List<Order>> orderHistoryLive;
     private int currentEventId;
+    private boolean[] adminChecked;
 
     static Repository repository = new Repository();
 
@@ -46,11 +47,26 @@ public class Repository {
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
+        adminChecked = new boolean[2];
+        adminChecked[0] = adminChecked[1] = false;
     }
 
     public static Repository getInstance() { return repository; }
 
+    public void resetRepository(){
+        this.currentAdminLive = new MutableLiveData<>();
+        this.currentCustomerLive = new MutableLiveData<>();
+        this.eventsLive = new MutableLiveData<>();
+        this.ticketsLive = new MutableLiveData<>();
+        this.currentEventLive = new MutableLiveData<>();
+        this.addEventLive = new MutableLiveData<>();
+        this.venuesLive = new MutableLiveData<>();
+        this.orderHistoryLive = new MutableLiveData<>();
+        adminChecked[0] = adminChecked[1] = false;
+    }
+
     public LiveData<Admin> getAdminFromServer(String email, String password){
+        adminChecked[0] = adminChecked[1] = false;
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
@@ -61,14 +77,15 @@ public class Repository {
             @Override
             public void onResponse(Call<Admin> call, Response<Admin> response) {
                 Admin admin = response.body();
-                currentAdminLive.postValue(admin);
+                currentAdminLive.setValue(admin);
+                if(admin == null) adminChecked[0] = true;
             }
 
             @Override
             public void onFailure(Call<Admin> call, Throwable t) {
-
             }
         });
+        adminChecked[1] = true;
         return currentAdminLive;
     }
 
@@ -86,7 +103,7 @@ public class Repository {
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 Customer customer = response.body();
                 currentCustomerLive.postValue(customer);
-                if(customer == null) Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_SHORT).show();
+                if(customer == null & (currentAdminLive.getValue() == null) & adminChecked[0] & adminChecked[1]) Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_SHORT).show();
             }
 
             @Override

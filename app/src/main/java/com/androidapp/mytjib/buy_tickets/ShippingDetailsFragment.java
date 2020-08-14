@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,10 +53,13 @@ public class ShippingDetailsFragment  extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(MyAccountViewModel.class);
 
         userId = getArguments().getInt("userId");
-        final int eventId = getArguments().getInt("eventId");
+    //    final int eventId = getArguments().getInt("eventId");
         final ArrayList<Integer> ticketIds = getArguments().getIntegerArrayList("ticketIds");
         final int price = getArguments().getInt("price");
         mViewModel.createRepository(userId);
+
+        TextView priceText = view.findViewById(R.id.shipping_price);
+        priceText.setText("Total price: " + price + "₩");
 
         Button purchaseBtn = view.findViewById(R.id.shipping_purchase);
         purchaseBtn.setOnClickListener(new View.OnClickListener() {
