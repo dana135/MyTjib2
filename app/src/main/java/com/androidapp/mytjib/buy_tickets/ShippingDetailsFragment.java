@@ -19,14 +19,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.androidapp.mytjib.R;
-import com.androidapp.mytjib.admin_panel.events.EditEventDetailsFragment;
-import com.androidapp.mytjib.admin_panel.events.EditEventDetailsViewModel;
 import com.androidapp.mytjib.customer.MyAccountViewModel;
 import com.androidapp.mytjib.customer.ShippingDetails;
-import com.androidapp.mytjib.events.Event;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShippingDetailsFragment  extends Fragment {
 
@@ -53,7 +49,6 @@ public class ShippingDetailsFragment  extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(MyAccountViewModel.class);
 
         userId = getArguments().getInt("userId");
-    //    final int eventId = getArguments().getInt("eventId");
         final ArrayList<Integer> ticketIds = getArguments().getIntegerArrayList("ticketIds");
         final int price = getArguments().getInt("price");
         mViewModel.createRepository(userId);

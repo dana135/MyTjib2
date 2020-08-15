@@ -3,11 +3,14 @@ package com.androidapp.mytjib.network;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
 
+import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.customer.Customer;
 import com.androidapp.mytjib.customer.Order;
 import com.androidapp.mytjib.customer.ShippingDetails;
@@ -16,6 +19,9 @@ import com.androidapp.mytjib.buy_tickets.Ticket;
 import com.androidapp.mytjib.admin_panel.Admin;
 import com.androidapp.mytjib.admin_panel.venues.Venue;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,7 +54,8 @@ public class Repository {
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
         adminChecked = new boolean[2];
-        adminChecked[0] = adminChecked[1] = false;
+        adminChecked[0] = false;
+        adminChecked[1] = false;
     }
 
     public static Repository getInstance() { return repository; }
@@ -62,7 +69,8 @@ public class Repository {
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
-        adminChecked[0] = adminChecked[1] = false;
+        adminChecked[0] = false;
+        adminChecked[1] = false;
     }
 
     public LiveData<Admin> getAdminFromServer(String email, String password){
@@ -75,7 +83,7 @@ public class Repository {
         call.enqueue(new Callback<Admin>() {
 
             @Override
-            public void onResponse(Call<Admin> call, Response<Admin> response) {
+            public void onResponse(@NotNull Call<Admin> call, Response<Admin> response) {
                 Admin admin = response.body();
                 currentAdminLive.setValue(admin);
                 if(admin == null) adminChecked[0] = true;
@@ -90,6 +98,7 @@ public class Repository {
     }
 
     public LiveData<Customer> getCustomerFromServer(String email, String password, Context c){
+
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
@@ -103,7 +112,8 @@ public class Repository {
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 Customer customer = response.body();
                 currentCustomerLive.postValue(customer);
-                if(customer == null & (currentAdminLive.getValue() == null) & adminChecked[0] & adminChecked[1]) Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_SHORT).show();
+                if(customer == null & (currentAdminLive.getValue() == null) & adminChecked[0] & adminChecked[1])
+                    Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -113,7 +123,7 @@ public class Repository {
         return currentCustomerLive;
     }
 
-    public LiveData<Customer> getCustomerByIdFromServer(int id){
+    public LiveData<Customer> getCustomerById(int id){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
@@ -128,8 +138,7 @@ public class Repository {
             }
 
             @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
-
+            public void onFailure(@NotNull Call<Customer> call, Throwable t) {
             }
         });
         return currentCustomerLive;
@@ -169,7 +178,7 @@ public class Repository {
             }
 
             @Override
-            public void onFailure(Call<Customer> call, Throwable t) {
+            public void onFailure(@NotNull Call<Customer> call, Throwable t) {
                 Log.d("STATE", "failure");
             }
         });
@@ -279,16 +288,19 @@ public class Repository {
         });
     }
 
-    public void deleteEvent() {
+    public void deleteEvent(View v, final Context context) {
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
+
+        final View view = v;
 
         Call<Void> call = service.deleteEvent(currentEventId);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("STATE", response.message());
+                Navigation.findNavController(view).navigate(R.id.editEventsFragment);
+                Toast.makeText(context, "Event Deleted Successfully" , Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -320,21 +332,19 @@ public class Repository {
         return addEventLive;
     }
 
-    public void addEventTickets(int numOfTickets, String section, int price,  boolean marked){
+    public void addEventTickets(int numOfTickets, String section, int price){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
-        Call<Void> call = service.addEventTickets(currentEventId, numOfTickets, section, price, marked);
+        Call<Void> call = service.addEventTickets(currentEventId, numOfTickets, section, price);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("STATE", response.message());
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("STATE", "failure");
             }
         });
     }
@@ -358,23 +368,48 @@ public class Repository {
         });
     }
 
-    public void customerSignUp(Customer customer) {
+    public LiveData<Customer> customerSignUp(final Customer customer, final Context context, final View view){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
-        Call<Void> call = service.customerSignUp(customer);
+        Call<Customer> call = service.findCustomerByEmail(customer.getEmail());
 
-        call.enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<Customer>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("STATE", response.message());
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                Customer c = response.body();
+                currentCustomerLive.postValue(c);
+                if(c == null) createAccount(customer, context, view);
+                else Toast.makeText(context, "Account with this email already exists" , Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("STATE", "failure");
+            public void onFailure(Call<Customer> call, Throwable t) {
             }
         });
+        return currentCustomerLive;
+    }
+
+
+    public void createAccount(Customer customer, final Context context, final View view) {
+
+            ApiService service = RetrofitInstance.
+                    getRetrofitInstance().create(ApiService.class);
+
+            Call<Void> call = service.customerSignUp(customer);
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_loginFragment);
+                    Toast.makeText(context, "Registered successfully" , Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.d("STATE", "failure");
+                }
+            });
     }
 
     public void checkout(int userId, ShippingDetails shipping) {

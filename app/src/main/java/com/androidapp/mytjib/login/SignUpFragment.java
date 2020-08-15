@@ -1,5 +1,6 @@
 package com.androidapp.mytjib.login;
 
+import android.database.Observable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
@@ -43,39 +46,50 @@ public class SignUpFragment extends Fragment {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               addNewCustomer();
+                addNewCustomer();
             }
         });
 
     }
 
     private void addNewCustomer() {
+        final Customer[] customer = {null};
         EditText usernameText = view.findViewById(R.id.signup_username);
         EditText emailText = view.findViewById(R.id.signup_email);
         EditText passwordText = view.findViewById(R.id.signup_password);
+        EditText passwordConfText = view.findViewById(R.id.signup_password_conf);
 
-        String username = usernameText.getText().toString();
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
+        final String username = usernameText.getText().toString();
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
+        String passwordConf = passwordConfText.getText().toString();
 
-        if(password.length() < 8){
-            Toast.makeText(getContext(), "Password must contain at least 8 characters" , Toast.LENGTH_LONG).show();
+        if(username.isEmpty()){
+            Toast.makeText(getContext(), "Invalid username" , Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(password.length() < 8){
+            Toast.makeText(getContext(), "Password must contain at least 8 characters" , Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(!password.equals(passwordConf)){
+            Toast.makeText(getContext(), "Passwords do not match" , Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int altCount = 0;
         for(int i=0; i<email.length(); i++){
             if(email.charAt(i) == '@') altCount++;
         }
         if(email.length()<5 | altCount!=1 | !email.contains(".")){
-            Toast.makeText(getContext(), "Invalid email" , Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Invalid email" , Toast.LENGTH_SHORT).show();
             return;
         }
 
         Customer newCustomer = new Customer(username, email, password);
-        mViewModel.customerSignUp(newCustomer);
+        mViewModel.customerSignUp(newCustomer, getContext(), view);
 
-        Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_loginFragment);
-        Toast.makeText(getContext(), "Registered successfully" , Toast.LENGTH_LONG).show();
     }
 
 }

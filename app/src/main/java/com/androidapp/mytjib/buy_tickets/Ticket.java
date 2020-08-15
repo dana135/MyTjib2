@@ -12,7 +12,6 @@ public class Ticket {
      * position : 1
      * price : 30000
      * status : unavailable
-     * marked : true
      */
 
     private int id;
@@ -21,7 +20,15 @@ public class Ticket {
     private int position;
     private int price;
     private String status;
-    private boolean marked;
+
+    public Ticket(int id, String eventName, String section, int position, int price, String status) {
+        this.id = id;
+        this.eventName = eventName;
+        this.section = section;
+        this.position = position;
+        this.price = price;
+        this.status = status;
+    }
 
     public int getId() {
         return id;
@@ -71,14 +78,6 @@ public class Ticket {
         this.status = status;
     }
 
-    public boolean isMarked() {
-        return marked;
-    }
-
-    public void setMarked(boolean marked) {
-        this.marked = marked;
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -86,7 +85,7 @@ public class Ticket {
 
         ticket += "Event: " + eventName + "\n";
         ticket += "Section: " + section + "\n";
-        if(marked) ticket += "Position: " + position + "\n";
+        if(section.equals("SITTING")) ticket += "Position: " + position + "\n";
         ticket += "Price: " + price + "\n";
 
         return ticket;

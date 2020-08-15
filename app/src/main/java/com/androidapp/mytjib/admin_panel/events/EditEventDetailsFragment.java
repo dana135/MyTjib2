@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -73,17 +72,18 @@ public class EditEventDetailsFragment extends Fragment {
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
                 public void onClick(View view) {
-                mViewModel.editEvent(getUpdatedEvent());
-                Navigation.findNavController(view).navigate(R.id.editEventsFragment);
-                Toast.makeText(getContext(), "Event Updated Successfully" , Toast.LENGTH_LONG).show();
+                Event e = getUpdatedEvent();
+                if(e != null) {
+                    mViewModel.editEvent(e);
+                    Navigation.findNavController(view).navigate(R.id.editEventsFragment);
+                    Toast.makeText(getContext(), "Event Updated Successfully", Toast.LENGTH_LONG).show();
+                }
             }
         });
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewModel.deleteEvent();
-                Navigation.findNavController(view).navigate(R.id.editEventsFragment);
-                Toast.makeText(getContext(), "Event Deleted Successfully" , Toast.LENGTH_LONG).show();
+                mViewModel.deleteEvent(view, getContext());
             }
         });
 
@@ -109,12 +109,15 @@ public class EditEventDetailsFragment extends Fragment {
 
     private void updateUiEvent(Event event) {
         EditText eventName = view.findViewById(R.id.edit_eventName);
-        EditText eventType = view.findViewById(R.id.edit_eventType);
+        Spinner eventType = view.findViewById(R.id.spinner_type);
         EditText eventTime = view.findViewById(R.id.edit_eventTime);
         EditText eventImage = view.findViewById(R.id.edit_eventImage);
 
         eventName.setText(event.getName(), TextView.BufferType.EDITABLE);
-        eventType.setText(event.getEventType(), TextView.BufferType.EDITABLE);
+        String[] eventTypes = {"Live Concert", "Online Concert", "Fan Meeting"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, eventTypes);
+        eventType.setAdapter(adapter);
         eventTime.setText(event.getDateAndTime(), TextView.BufferType.EDITABLE);
         eventImage.setText(event.getImage(), TextView.BufferType.EDITABLE);
     }
@@ -132,19 +135,20 @@ public class EditEventDetailsFragment extends Fragment {
 
     private Event getUpdatedEvent() {
         EditText eventName = view.findViewById(R.id.edit_eventName);
-        EditText eventType = view.findViewById(R.id.edit_eventType);
+        Spinner eventType = view.findViewById(R.id.spinner_type);
         EditText eventTime = view.findViewById(R.id.edit_eventTime);
         EditText eventImage = view.findViewById(R.id.edit_eventImage);
         Spinner venueName = view.findViewById(R.id.edit_venue_spinner);
 
         String name = eventName.getText().toString();
-        String type = eventType.getText().toString();
+        String type = eventType.getSelectedItem().toString();
         String venue;
         if(venueName.isEnabled()) venue = venueName.getSelectedItem().toString();
         else venue = currentEvent.getVenueName();
         String time = eventTime.getText().toString();
         String image = eventImage.getText().toString();
 
+        if(name.isEmpty() | time.isEmpty() | image.isEmpty()) return null;
         return new Event(name, type, image, venue, time);
     }
 

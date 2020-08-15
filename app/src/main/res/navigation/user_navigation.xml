@@ -29,28 +29,11 @@
             app:argType="integer"
             android:defaultValue="-1" />
         <action
-            android:id="@+id/action_eventDetailsFragment_to_event_buy_tickets"
-            app:destination="@id/event_buy_tickets" />
-        <action
             android:id="@+id/action_eventDetailsFragment_to_myAccountFragment"
             app:destination="@id/myAccountFragment" />
         <action
             android:id="@+id/action_eventDetailsFragment_to_buyTicketsFragment2"
             app:destination="@id/buyTicketsFragment2" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/event_buy_tickets"
-        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
-        android:label="buy_tickets_fragment"
-        tools:layout="@layout/buy_tickets_fragment" >
-        <argument
-            android:name="id"
-            app:argType="integer"
-            android:defaultValue="-1" />
-        <action
-            android:id="@+id/action_event_buy_tickets_to_myAccountFragment"
-            app:destination="@id/myAccountFragment" />
     </fragment>
 
     <fragment
@@ -63,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/buyTicketsFragment2"
-        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment2"
+        android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
         android:label="BuyTicketsFragment2" >
         <action
             android:id="@+id/action_buyTicketsFragment2_to_shippingDetailsFragment"

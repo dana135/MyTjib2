@@ -1,6 +1,15 @@
 package com.androidapp.mytjib.buy_tickets;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,26 +18,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Spinner;
-
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.event_details.EventDetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class BuyTicketsFragment extends Fragment {
 
     private int userId;
     private EventDetailsViewModel mViewModel;
+    private GridView seatsGrid;
+    private SeatAdapter adapter;
     private View view;
 
     @Override
@@ -49,37 +50,99 @@ public class BuyTicketsFragment extends Fragment {
         final int userId = getArguments().getInt("userId");
         this.userId = userId;
 
+        adapter = new SeatAdapter(getContext());
         mViewModel.createRepository(eventId);
 
         mViewModel.getTickets().observe(getViewLifecycleOwner(), new Observer<List<Ticket>>() {
             @Override
             public void onChanged(List<Ticket> tickets) {
-                updateUi(tickets);
+                updateSpinners(tickets);
+                adapter.setTickets(tickets);
+                adapter.setTextViews(view.findViewById(R.id.sitting_text), view.findViewById(R.id.standing_text), view.findViewById(R.id.vip_text));
+                int numOfSitting = 0;
+                for(Ticket t : tickets){
+                    if(t.getSection().equals("SITTING")) numOfSitting++;
+                }
+                seatsGrid.setNumColumns((int)Math.sqrt(numOfSitting));
+                seatsGrid.setAdapter(adapter);
+                seatsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        adapter.selectTicket(i);
+                    }
+                });
             }
         });
 
-        CheckBox checkbox = getView().findViewById(R.id.checkbox_marked_tickets);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
+        Button buyTickets = view.findViewById(R.id.buy_tickets_gridbtn);
+        buyTickets.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Spinner spinner = view.findViewById(R.id.spinner);
-                spinner.setEnabled(b);
+            public void onClick(View view) {
+                Spinner stand = getView().findViewById(R.id.standing_spinner);
+                Spinner vip = getView().findViewById(R.id.vip_spinner);
+                int standingTickets = Integer.valueOf(stand.getSelectedItem().toString());
+                int vipTickets = Integer.valueOf(vip.getSelectedItem().toString());
+                adapter.selectStandingTickets(standingTickets);
+                adapter.selectVipTickets(vipTickets);
+                ArrayList<Integer> ids = adapter.getTicketIds();
+
+                if(ids.size()>0 | standingTickets!=0 | vipTickets!=0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("userId", userId);
+                    bundle.putIntegerArrayList("ticketIds", ids);
+                    bundle.putInt("price", adapter.getTotalPrice());
+                    Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_shippingDetailsFragment, bundle);
+                }
             }
         });
 
     }
 
-    private void updateUi(List<Ticket> tickets) {
-        ArrayList<String> tickets_view = new ArrayList<>();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        this.view = view;
+        seatsGrid = view.findViewById(R.id.tickets_grid);
+    }
+
+    private void updateSpinners(List<Ticket> tickets){
+        ArrayList<String> standing_view = new ArrayList<>();
+        ArrayList<Ticket> standingTickets = new ArrayList<>();
+        ArrayList<String> vip_view = new ArrayList<>();
+        ArrayList<Ticket> vipTickets = new ArrayList<>();
+
+        Integer availableStanding = 1;
+        Integer availableVip = 1;
+
+        standing_view.add("0");
+        vip_view.add("0");
+
         for (Ticket t : tickets) {
-            if (!t.isMarked()) continue;
-            tickets_view.add(String.format(Locale.KOREA, "%d - %d₩", t.getPosition(), t.getPrice()));
+            if (t.getSection().equals("STANDING") & !t.getStatus().equals("unavailable")) {
+                standingTickets.add(t);
+                standing_view.add(availableStanding.toString());
+                availableStanding++;
+            }
+            if (t.getSection().equals("VIP") & !t.getStatus().equals("unavailable")) {
+                vipTickets.add(t);
+                vip_view.add(availableVip.toString());
+                availableVip++;
+            }
         }
-        Spinner spinner = getView().findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, tickets_view.toArray(new String[0]));
-        spinner.setAdapter(adapter);
+
+        Spinner standingSpinner = getView().findViewById(R.id.standing_spinner);
+        ArrayAdapter<String> standingAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, standing_view.toArray(new String[0]));
+        standingSpinner.setAdapter(standingAdapter);
+
+        Spinner vipSpinner = getView().findViewById(R.id.vip_spinner);
+        ArrayAdapter<String> vipAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, vip_view.toArray(new String[0]));
+        vipSpinner.setAdapter(vipAdapter);
+
+        this.adapter.setStandingTickets(standingTickets);
+        this.adapter.setVipTickets(vipTickets);
     }
 
     @Override
@@ -88,7 +151,7 @@ public class BuyTicketsFragment extends Fragment {
             case R.id.menu_myaccount:
                 Bundle bundle = new Bundle();
                 bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_event_buy_tickets_to_myAccountFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_myAccountFragment, bundle);
         }
         return true;
     }

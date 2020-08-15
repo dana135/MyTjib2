@@ -79,39 +79,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <CheckBox
-        android:id="@+id/add_tickets_marked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="135dp"
-        android:text="Marked Positions"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_tickets_price" />
-
     <Button
         android:id="@+id/add_more_tickets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="28dp"
         android:text="ADD MORE"
         app:layout_constraintEnd_toStartOf="@+id/finish_add_tickets"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_tickets_marked" />
+        app:layout_constraintTop_toBottomOf="@+id/add_tickets_price" />
 
     <Button
         android:id="@+id/finish_add_tickets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="100dp"
         android:text="FINISH"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_more_tickets"
-        app:layout_constraintTop_toBottomOf="@+id/add_tickets_marked" />
+        app:layout_constraintTop_toBottomOf="@+id/add_tickets_price" />
 </androidx.constraintlayout.widget.ConstraintLayout>

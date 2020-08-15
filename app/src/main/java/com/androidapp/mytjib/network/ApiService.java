@@ -35,6 +35,9 @@ public interface ApiService {
     @GET("venues")
     Call<List<Venue>> getVenues();
 
+    @GET("customers/findemail")
+    Call<Customer> findCustomerByEmail(@Query("email") String email);
+
     @GET("customers/login")
     Call<Customer> getCustomer(@Query("email") String email, @Query("password") String password);
 
@@ -56,7 +59,7 @@ public interface ApiService {
     @FormUrlEncoded
     @PUT("events/{id}/addtickets")
     Call<Void> addEventTickets(@Path("id") int id, @Field("numOfTickets") int numOfTickets, @Field("section") String section,
-                               @Field("price") int price, @Field("marked") boolean marked);
+                               @Field("price") int price);
 
     @PUT("customers/{id}/checkout")
     Call<Void> checkout(@Path("id") int userId, @Body ShippingDetails shipping);

@@ -62,12 +62,14 @@ public class AddEventFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewModel.addEvent(addNewEvent()).observe(getViewLifecycleOwner(), new Observer<Event>() {
-                    @Override
-                    public void onChanged(Event event) {
-                        setEvent(event);
-                    }
-                });
+                if(addNewEvent() != null) {
+                    mViewModel.addEvent(addNewEvent()).observe(getViewLifecycleOwner(), new Observer<Event>() {
+                        @Override
+                        public void onChanged(Event event) {
+                            setEvent(event);
+                        }
+                    });
+                }
             }
         });
 
@@ -97,6 +99,7 @@ public class AddEventFragment extends Fragment {
         String venue = eventVenue.getSelectedItem().toString();
         String image = eventImage.getText().toString();
 
+        if(name.isEmpty() | time.isEmpty() | image.isEmpty()) return null;
         return new Event(name, type, image, venue, time);
     }
 

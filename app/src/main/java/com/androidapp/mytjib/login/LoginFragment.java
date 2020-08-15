@@ -78,7 +78,7 @@ public class LoginFragment extends Fragment {
                             if(admin == null)
                                  customerLogin(cu);
                         }
-                    });
+                });
 
             }
         });

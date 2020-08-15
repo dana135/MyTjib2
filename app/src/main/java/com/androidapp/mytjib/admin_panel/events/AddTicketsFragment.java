@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +25,7 @@ public class AddTicketsFragment extends Fragment {
     private boolean standing;
     private boolean sitting;
     private boolean vip;
+    private Toast currentToast;
 
     public static AddTicketsFragment newInstance() {
         return new AddTicketsFragment();
@@ -47,6 +47,7 @@ public class AddTicketsFragment extends Fragment {
         standing = getArguments().getBoolean("standing");
         sitting = getArguments().getBoolean("sitting");
         vip = getArguments().getBoolean("vip");
+        currentToast = null;
         mViewModel.createRepository(id);
 
         String[] eventTypes = {"STANDING", "SITTING", "VIP"};
@@ -74,6 +75,9 @@ public class AddTicketsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addTickets();
+                if(currentToast != null) currentToast.cancel();
+                currentToast = Toast.makeText(getContext(), "Event added successfully", Toast.LENGTH_LONG);
+                currentToast.show();
                 Navigation.findNavController(view).navigate(R.id.action_addTicketsFragment_to_editEventsFragment);
             }
         });
@@ -85,23 +89,34 @@ public class AddTicketsFragment extends Fragment {
         EditText num = view.findViewById(R.id.add_num_of_tickets);
         Spinner sectionSpinner = getView().findViewById(R.id.section_spinner);
         EditText ticketPrice = view.findViewById(R.id.add_tickets_price);
-        CheckBox markedTickets = getView().findViewById(R.id.add_tickets_marked);
+        int numOfTickets, price;
 
-        int numOfTickets = Integer.valueOf(num.getText().toString());
+        try {
+            numOfTickets = Integer.valueOf(num.getText().toString());
+        } catch (Exception e) {
+            currentToast = Toast.makeText(getContext(), "Invalid number of tickets", Toast.LENGTH_SHORT);
+            currentToast.show();
+            return;
+        }
 
         String section = sectionSpinner.getSelectedItem().toString();
         if((standing & section == "STANDING") | (sitting & section == "SITTING") | (vip & section == "VIP")) {
             Toast.makeText(getContext(), "Already added tickets for this section", Toast.LENGTH_LONG).show();
             return;
         }
+
+        try {
+            price = Integer.valueOf(ticketPrice.getText().toString());
+        }  catch (Exception e) {
+            Toast.makeText(getContext(), "Invalid price", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if(section == "STANDING") standing = true;
         if(section == "SITTING") standing = true;
         if(section == "VIP") standing = true;
 
-        int price = Integer.valueOf(ticketPrice.getText().toString());
-        boolean marked = markedTickets.isChecked();
-
-        mViewModel.addEventTickets(numOfTickets, section, price, marked);
+        mViewModel.addEventTickets(numOfTickets, section, price);
 
     }
 

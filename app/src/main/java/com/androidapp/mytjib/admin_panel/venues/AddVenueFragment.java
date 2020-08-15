@@ -44,8 +44,6 @@ public class AddVenueFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 addNewVenue();
-                Navigation.findNavController(view).navigate(R.id.editEventsFragment);
-                Toast.makeText(getContext(), "Venue Added Successfully" , Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -55,12 +53,23 @@ public class AddVenueFragment extends Fragment {
         EditText venueLocation = view.findViewById(R.id.add_venue_location);
         EditText venueCapacity = view.findViewById(R.id.add_venue_capacity);
 
+        int capacity;
         String name = venueName.getText().toString();
         String location = venueLocation.getText().toString();
-        int capacity = Integer.valueOf(venueCapacity.getText().toString());
+        try {
+            capacity = Integer.valueOf(venueCapacity.getText().toString());
+        } catch(Exception e) {
+            Toast.makeText(getContext(), "Invalid capacity", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(name.isEmpty() | location.isEmpty()) return;
 
         Venue toAdd = new Venue(name, location, capacity);
         mViewModel.addVenue(toAdd);
+
+        Navigation.findNavController(view).navigate(R.id.editEventsFragment);
+        Toast.makeText(getContext(), "Venue Added Successfully" , Toast.LENGTH_LONG).show();
     }
 
 }
