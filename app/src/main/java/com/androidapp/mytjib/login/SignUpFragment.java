@@ -68,7 +68,10 @@ public class SignUpFragment extends Fragment {
             Toast.makeText(getContext(), "Invalid username" , Toast.LENGTH_SHORT).show();
             return;
         }
-
+        if(username.length() > 20) {
+            Toast.makeText(getContext(), "Username must be up to 20 characters long" , Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(password.length() < 8){
             Toast.makeText(getContext(), "Password must contain at least 8 characters" , Toast.LENGTH_SHORT).show();
             return;

@@ -69,4 +69,9 @@
             app:destination="@id/addTicketsFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/ordersAdminFragment"
+        android:name="com.androidapp.mytjib.admin_panel.orders.OrdersAdminFragment"
+        android:label="OrdersAdminFragment" />
+
 </navigation>

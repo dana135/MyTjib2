@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,10 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.mytjib.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyAccountFragment extends Fragment  {
+public class MyAccountFragment extends Fragment {
 
     private Customer customer;
     private int userId;
@@ -37,7 +37,7 @@ public class MyAccountFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.orders_fragment, container, false);
+        return inflater.inflate(R.layout.my_account_fragment, container, false);
     }
 
     @Override
@@ -47,7 +47,6 @@ public class MyAccountFragment extends Fragment  {
         userId = getArguments().getInt("userId");
         customer = null;
 
-        List<Order> orders = new ArrayList<>();
         final OrdersAdapter adapter = new OrdersAdapter(getContext());
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -64,6 +63,16 @@ public class MyAccountFragment extends Fragment  {
             @Override
             public void onChanged(Customer cu) {
                 setCustomer(cu);
+            }
+        });
+
+        Button changeDetails = view.findViewById(R.id.change_account_btn);
+        changeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.action_myAccountFragment_to_changeDetailsFragment, bundle);
             }
         });
     }
@@ -85,11 +94,18 @@ public class MyAccountFragment extends Fragment  {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", userId);
         switch (item.getItemId()) {
-            case R.id.menu_myaccount:
-                Bundle bundle = new Bundle();
-                bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_shippingDetailsFragment_to_myAccountFragment, bundle);
+            case R.id.menu_live:
+                Navigation.findNavController(view).navigate(R.id.liveConcertsFragment, bundle);
+                break;
+            case R.id.menu_online:
+                Navigation.findNavController(view).navigate(R.id.onlineConcertsFragment, bundle);
+                break;
+            case R.id.menu_fan:
+                Navigation.findNavController(view).navigate(R.id.fanMeetingsFragment, bundle);
+                break;
         }
         return true;
     }

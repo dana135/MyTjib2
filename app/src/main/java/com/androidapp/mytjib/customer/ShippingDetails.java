@@ -75,4 +75,15 @@ public class ShippingDetails {
     public void setTicketIds(List<Integer> ticketIds) {
         this.ticketIds = ticketIds;
     }
+
+    @Override
+    public String toString() {
+     String string = "";
+     string += "First Name: " + firstName + "\n";
+     string += "Last Name: " + lastName + "\n";
+     string += "Credit Card Number: " + creditCard + "\n";
+     string += "Credit Card Expiration: " + creditExpiration;
+     return string;
+    }
+
 }

@@ -3,13 +3,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_myaccount"
         android:icon="@drawable/ic_baseline_person_outline_24"
         android:title="My Account"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_live"
+        android:title="Live Concerts"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_online"
+        android:title="Online Concerts"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_fan"
+        android:title="Fan Meetings"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_baseline_home_24"
         android:title="Log Out"
         app:showAsAction="never" />
 

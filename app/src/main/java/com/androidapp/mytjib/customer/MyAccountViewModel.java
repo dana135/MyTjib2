@@ -1,5 +1,8 @@
 package com.androidapp.mytjib.customer;
 
+import android.content.Context;
+import android.view.View;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -24,9 +27,8 @@ public class MyAccountViewModel extends ViewModel {
         repository.checkout(userId, shipping);
     }
 
-    public LiveData<Customer> getCurrentCustomer(){
-        return repository.getCurrentCustomer();
-    }
+    public void updateCustomer(int userId, Customer customer, View view, Context context){
+        repository.updateCustomer(userId, customer, view, context); }
 
     public LiveData<Customer> getCustomerById(int id){
         return repository.getCustomerById(id);

@@ -43,7 +43,11 @@
         <action
             android:id="@+id/action_myAccountFragment_self"
             app:destination="@id/myAccountFragment" />
+        <action
+            android:id="@+id/action_myAccountFragment_to_changeDetailsFragment"
+            app:destination="@id/changeDetailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/buyTicketsFragment2"
         android:name="com.androidapp.mytjib.buy_tickets.BuyTicketsFragment"
@@ -67,5 +71,22 @@
             android:id="@+id/action_shippingDetailsFragment_to_myAccountFragment"
             app:destination="@id/myAccountFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/changeDetailsFragment"
+        android:name="com.androidapp.mytjib.customer.ChangeDetailsFragment"
+        android:label="ChangeDetailsFragment" />
+    <fragment
+        android:id="@+id/liveConcertsFragment"
+        android:name="com.androidapp.mytjib.event_types.LiveConcertsFragment"
+        android:label="LiveConcertsFragment" />
+    <fragment
+        android:id="@+id/onlineConcertsFragment"
+        android:name="com.androidapp.mytjib.event_types.OnlineConcertsFragment"
+        android:label="OnlineConcertsFragment" />
+    <fragment
+        android:id="@+id/fanMeetingsFragment"
+        android:name="com.androidapp.mytjib.event_types.FanMeetingsFragment"
+        android:label="FanMeetingsFragment" />
 
 </navigation>

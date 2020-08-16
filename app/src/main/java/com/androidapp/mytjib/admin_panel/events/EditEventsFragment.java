@@ -2,6 +2,7 @@ package com.androidapp.mytjib.admin_panel.events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +36,7 @@ public class EditEventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.edit_events_fragment, container, false);
     }
 
@@ -43,7 +45,6 @@ public class EditEventsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EditEventsViewModel.class);
 
-        List<Event> events = new ArrayList<>();
         final EditEventsAdapter adapter = new EditEventsAdapter(getContext(), new EditEventsAdapter.ClickListener() {
             @Override
             public void onEventClicked(int id) {
@@ -86,5 +87,14 @@ public class EditEventsFragment extends Fragment {
 
         this.view = view;
         recycler = view.findViewById(R.id.edit_events_recycler);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.orders_admin:
+                Navigation.findNavController(view).navigate(R.id.ordersAdminFragment);
+        }
+        return true;
     }
 }

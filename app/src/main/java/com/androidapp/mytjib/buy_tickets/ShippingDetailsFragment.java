@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,17 +58,29 @@ public class ShippingDetailsFragment  extends Fragment {
         TextView priceText = view.findViewById(R.id.shipping_price);
         priceText.setText("Total price: " + price + "₩");
 
+        String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+        String[] years = {"2021", "2022", "2023", "2025", "2026"};
+        Spinner monthSpinner = view.findViewById(R.id.card_month_spinner);
+        Spinner yearsSpinner = view.findViewById(R.id.card_year_spinner);
+        ArrayAdapter<String> monthsAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, months);
+        monthSpinner.setAdapter(monthsAdapter);
+        ArrayAdapter<String> yearsAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, years);
+        yearsSpinner.setAdapter(yearsAdapter);
+
         Button purchaseBtn = view.findViewById(R.id.shipping_purchase);
         purchaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer j = userId;
-                Log.d("STF", j.toString());
-                mViewModel.checkout(userId, getShipping(ticketIds));
-                Bundle bundle = new Bundle();
-                bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_shippingDetailsFragment_to_eventsFragment, bundle);
-                Toast.makeText(getContext(), "Purchase successfully sent to your email!" , Toast.LENGTH_LONG).show();
+                ShippingDetails shipping = getShipping(ticketIds);
+                if(shipping != null) {
+                    mViewModel.checkout(userId, shipping);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("userId", userId);
+                    Navigation.findNavController(view).navigate(R.id.action_shippingDetailsFragment_to_eventsFragment, bundle);
+                    Toast.makeText(getContext(), "Purchase successfully sent to your email!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -75,23 +89,47 @@ public class ShippingDetailsFragment  extends Fragment {
         EditText firstNameEdit = view.findViewById(R.id.shipping_first_name);
         EditText lastNameEdit = view.findViewById(R.id.shipping_last_name);
         EditText creditCardEdit = view.findViewById(R.id.shipping_credit_card);
-        EditText cardExpirationEdit = view.findViewById(R.id.shipping_card_expiration);
+        Spinner monthSpinner = view.findViewById(R.id.card_month_spinner);
+        Spinner yearsSpinner = view.findViewById(R.id.card_year_spinner);
 
         String firstName = firstNameEdit.getText().toString();
         String lastName = lastNameEdit.getText().toString();
         String creditCard = creditCardEdit.getText().toString();
-        int cardExpiration = Integer.valueOf(cardExpirationEdit.getText().toString());
+        String cardExpirationString = monthSpinner.getSelectedItem().toString() + yearsSpinner.getSelectedItem().toString();
+        int cardExpiration = Integer.valueOf(cardExpirationString);
 
+        if(creditCard.length() < 8) {
+            Toast.makeText(getContext(), "Credit card must contain at least 8 digits", Toast.LENGTH_LONG).show();
+            return null;
+        }
+        for(int i=0; i<creditCard.length(); i++) {
+            if(!(Character.isDigit(creditCard.charAt(i)))){
+                Toast.makeText(getContext(), "Invalid credit card number", Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
+
+        if(firstName.isEmpty() | lastName.isEmpty()) return null;
         return new ShippingDetails(firstName, lastName, creditCard, cardExpiration, ticketIds);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", userId);
         switch (item.getItemId()) {
             case R.id.menu_myaccount:
-                Bundle bundle = new Bundle();
-                bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_shippingDetailsFragment_to_myAccountFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.myAccountFragment, bundle);
+                break;
+            case R.id.menu_live:
+                Navigation.findNavController(view).navigate(R.id.liveConcertsFragment, bundle);
+                break;
+            case R.id.menu_online:
+                Navigation.findNavController(view).navigate(R.id.onlineConcertsFragment, bundle);
+                break;
+            case R.id.menu_fan:
+                Navigation.findNavController(view).navigate(R.id.fanMeetingsFragment, bundle);
+                break;
         }
         return true;
     }

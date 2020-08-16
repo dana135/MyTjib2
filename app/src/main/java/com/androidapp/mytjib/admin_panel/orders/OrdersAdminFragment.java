@@ -1,4 +1,4 @@
-package com.androidapp.mytjib.admin_panel.venues;
+package com.androidapp.mytjib.admin_panel.orders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,61 +16,60 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.customer.Order;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class VenuesFragment extends Fragment {
+public class OrdersAdminFragment  extends Fragment {
 
-    private VenuesViewModel mViewModel;
+    private OrdersAdminViewModel mViewModel;
     private RecyclerView recycler;
     private View view;
 
-    public static VenuesFragment newInstance() {
-        return new VenuesFragment();
+    public static OrdersAdminFragment newInstance() {
+        return new OrdersAdminFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.venues_fragment, container, false);
+        return inflater.inflate(R.layout.orders_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(VenuesViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(OrdersAdminViewModel.class);
 
-        List<Venue> venues = new ArrayList<>();
-        final VenuesAdapter adapter = new VenuesAdapter(getContext());
+        final OrdersAdminAdapter adapter = new OrdersAdminAdapter(getContext());
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mViewModel.createRepository();
-        mViewModel.getVenues().observe(getViewLifecycleOwner(), new Observer<List<Venue>>() {
+        mViewModel.getOrders().observe(getViewLifecycleOwner(), new Observer<List<Order>>() {
             @Override
-            public void onChanged(List<Venue> venues) {
-                adapter.setVenues(venues);
+            public void onChanged(List<Order> orders) {
+                adapter.setOrders(orders);
             }
         });
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         this.view = view;
-        recycler = view.findViewById(R.id.venue_recycler);
+        recycler = view.findViewById(R.id.orders_admin_recycler);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.orders_admin:
-                Navigation.findNavController(view).navigate(R.id.ordersAdminFragment);
+               return false;
         }
         return true;
     }
+
 }

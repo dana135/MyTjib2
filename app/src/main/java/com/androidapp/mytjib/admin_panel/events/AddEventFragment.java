@@ -2,6 +2,7 @@ package com.androidapp.mytjib.admin_panel.events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,7 @@ public class AddEventFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.add_event_fragment, container, false);
     }
 
@@ -53,7 +55,7 @@ public class AddEventFragment extends Fragment {
         });
 
         String[] eventTypes = {"Live Concert", "Online Concert", "Fan Meeting"};
-        Spinner spinner = getView().findViewById(R.id.add_event_type);
+        Spinner spinner = view.findViewById(R.id.add_event_type);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, eventTypes);
         spinner.setAdapter(adapter);
@@ -72,7 +74,6 @@ public class AddEventFragment extends Fragment {
                 }
             }
         });
-
     }
 
     private void updateUi(List<Venue> venues) {
@@ -110,6 +111,15 @@ public class AddEventFragment extends Fragment {
         bundle.putBoolean("sitting", false);
         bundle.putBoolean("vip", false);
         Navigation.findNavController(view).navigate(R.id.addTicketsFragment, bundle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.orders_admin:
+                Navigation.findNavController(view).navigate(R.id.ordersAdminFragment);
+        }
+        return true;
     }
 
 }

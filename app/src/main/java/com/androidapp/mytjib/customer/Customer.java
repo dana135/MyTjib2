@@ -53,4 +53,12 @@ public class Customer {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        String string = "";
+        string += "Username: " + username + "\n";
+        string += "Email: " + email;
+        return string;
+    }
+
 }

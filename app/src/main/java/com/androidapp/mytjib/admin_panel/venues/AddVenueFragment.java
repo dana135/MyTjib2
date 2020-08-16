@@ -2,6 +2,7 @@ package com.androidapp.mytjib.admin_panel.venues;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +29,7 @@ public class AddVenueFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.add_venue_fragment, container, false);
     }
 
@@ -71,5 +73,15 @@ public class AddVenueFragment extends Fragment {
         Navigation.findNavController(view).navigate(R.id.editEventsFragment);
         Toast.makeText(getContext(), "Venue Added Successfully" , Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.orders_admin:
+                Navigation.findNavController(view).navigate(R.id.ordersAdminFragment);
+        }
+        return true;
+    }
+
 
 }

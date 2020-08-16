@@ -26,6 +26,15 @@ public interface ApiService {
     @GET("events")
     Call<List<Event>> getEvents();
 
+    @GET("events/liveconcerts")
+    Call<List<Event>> getLiveConcerts();
+
+    @GET("events/onlineconcerts")
+    Call<List<Event>> getOnlineConcerts();
+
+    @GET("events/fanmeetings")
+    Call<List<Event>> getFanMeetings();
+
     @GET("events/{id}")
     Call<Event> getEventDetails(@Path("id") int id);
 
@@ -50,6 +59,9 @@ public interface ApiService {
     @GET("admins/login")
     Call<Admin> getAdmin(@Query("email") String email, @Query("password") String password);
 
+    @GET("orders")
+    Call<List<Order>> getOrders();
+
     @DELETE("events/{id}")
     Call<Void> deleteEvent(@Path("id") int id);
 
@@ -63,6 +75,9 @@ public interface ApiService {
 
     @PUT("customers/{id}/checkout")
     Call<Void> checkout(@Path("id") int userId, @Body ShippingDetails shipping);
+
+    @PUT("customers/{id}")
+    Call<Void> updateCustomer(@Path("id") int userId, @Body Customer customer);
 
     @POST("events")
     Call<Event> addEvent(@Body Event event);

@@ -1,38 +1,36 @@
-package com.androidapp.mytjib.events;
-
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+package com.androidapp.mytjib.event_types;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidapp.mytjib.R;
-import com.androidapp.mytjib.login.UserActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.androidapp.mytjib.R;
+import com.androidapp.mytjib.events.Event;
+import com.androidapp.mytjib.events.EventsAdapter;
+import com.androidapp.mytjib.events.EventsViewModel;
+
 import java.util.List;
 
-public class EventsFragment extends Fragment {
+public class LiveConcertsFragment extends Fragment {
 
     private int userId;
     private EventsViewModel mViewModel;
     private RecyclerView recycler;
     private View view;
 
-    public static EventsFragment newInstance() {
-        return new EventsFragment();
+    public static LiveConcertsFragment newInstance() {
+        return new LiveConcertsFragment();
     }
 
     @Override
@@ -45,7 +43,7 @@ public class EventsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        userId = ((UserActivity) getActivity()).getUserId();
+        userId = getArguments().getInt("userId");
         mViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
 
         final EventsAdapter adapter = new EventsAdapter(getContext(), new EventsAdapter.ClickListener() {
@@ -54,14 +52,14 @@ public class EventsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("eventId", id);
                 bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_eventsFragment_to_eventDetailsFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.eventDetailsFragment, bundle);
             }
         });
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mViewModel.createRepository();
-        mViewModel.getEvents().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
+        mViewModel.getLiveConcerts().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(List<Event> events) {
                 adapter.setEvents(events);
@@ -72,7 +70,6 @@ public class EventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         this.view = view;
         recycler = view.findViewById(R.id.edit_events_recycler);
     }
@@ -84,9 +81,6 @@ public class EventsFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_myaccount:
                 Navigation.findNavController(view).navigate(R.id.myAccountFragment, bundle);
-                break;
-            case R.id.menu_live:
-                Navigation.findNavController(view).navigate(R.id.liveConcertsFragment, bundle);
                 break;
             case R.id.menu_online:
                 Navigation.findNavController(view).navigate(R.id.onlineConcertsFragment, bundle);

@@ -1,9 +1,13 @@
 package com.androidapp.mytjib.network;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
@@ -18,15 +22,18 @@ import com.androidapp.mytjib.events.Event;
 import com.androidapp.mytjib.buy_tickets.Ticket;
 import com.androidapp.mytjib.admin_panel.Admin;
 import com.androidapp.mytjib.admin_panel.venues.Venue;
+import com.androidapp.mytjib.login.AdminActivity;
+import com.androidapp.mytjib.login.UserActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.Path;
 
 
 public class Repository {
@@ -34,13 +41,16 @@ public class Repository {
     private MutableLiveData<Admin> currentAdminLive;
     private MutableLiveData<Customer> currentCustomerLive;
     private MutableLiveData<List<Event>> eventsLive;
+    private MutableLiveData<List<Event>> liveConcertsLive;
+    private MutableLiveData<List<Event>> onlineConcertsLive;
+    private MutableLiveData<List<Event>> fanMeetingsLive;
     private MutableLiveData<List<Ticket>> ticketsLive;
     private MutableLiveData<Event> currentEventLive;
     private MutableLiveData<Event> addEventLive;
     private MutableLiveData<List<Venue>> venuesLive;
     private MutableLiveData<List<Order>> orderHistoryLive;
+    private MutableLiveData<List<Order>> ordersLive;
     private int currentEventId;
-    private boolean[] adminChecked;
 
     static Repository repository = new Repository();
 
@@ -48,14 +58,15 @@ public class Repository {
         this.currentAdminLive = new MutableLiveData<>();
         this.currentCustomerLive = new MutableLiveData<>();
         this.eventsLive = new MutableLiveData<>();
+        this.liveConcertsLive = new MutableLiveData<>();
+        this.onlineConcertsLive = new MutableLiveData<>();
+        this.fanMeetingsLive = new MutableLiveData<>();
         this.ticketsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
-        adminChecked = new boolean[2];
-        adminChecked[0] = false;
-        adminChecked[1] = false;
+        this.ordersLive = new MutableLiveData<>();
     }
 
     public static Repository getInstance() { return repository; }
@@ -64,17 +75,18 @@ public class Repository {
         this.currentAdminLive = new MutableLiveData<>();
         this.currentCustomerLive = new MutableLiveData<>();
         this.eventsLive = new MutableLiveData<>();
+        this.liveConcertsLive = new MutableLiveData<>();
+        this.onlineConcertsLive = new MutableLiveData<>();
+        this.fanMeetingsLive = new MutableLiveData<>();
         this.ticketsLive = new MutableLiveData<>();
         this.currentEventLive = new MutableLiveData<>();
         this.addEventLive = new MutableLiveData<>();
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
-        adminChecked[0] = false;
-        adminChecked[1] = false;
+        this.ordersLive = new MutableLiveData<>();
     }
 
-    public LiveData<Admin> getAdminFromServer(String email, String password){
-        adminChecked[0] = adminChecked[1] = false;
+    public void tryAdminLogin(final String email, final String password, final View view, final Context context, final Activity activity){
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
 
@@ -84,25 +96,22 @@ public class Repository {
 
             @Override
             public void onResponse(@NotNull Call<Admin> call, Response<Admin> response) {
-                Admin admin = response.body();
-                currentAdminLive.setValue(admin);
-                if(admin == null) adminChecked[0] = true;
+                Intent intent = new Intent(activity, AdminActivity.class);
+                activity.startActivity(intent);
+                activity.finish();
             }
 
             @Override
             public void onFailure(Call<Admin> call, Throwable t) {
+                tryCustomerLogin(email, password, view, context, activity);
             }
         });
-        adminChecked[1] = true;
-        return currentAdminLive;
     }
 
-    public LiveData<Customer> getCustomerFromServer(String email, String password, Context c){
+    public void tryCustomerLogin(String email, String password, final View view, final Context context, final Activity activity){
 
         ApiService service = RetrofitInstance.
                 getRetrofitInstance().create(ApiService.class);
-
-        final Context context = c;
 
         Call<Customer> call = service.getCustomer(email, password);
 
@@ -111,16 +120,21 @@ public class Repository {
             @Override
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 Customer customer = response.body();
-                currentCustomerLive.postValue(customer);
-                if(customer == null & (currentAdminLive.getValue() == null) & adminChecked[0] & adminChecked[1])
-                    Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_LONG).show();
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", customer.getId());
+
+                Intent intent = new Intent(activity, UserActivity.class);
+                intent.putExtras(bundle);
+
+                activity.startActivity(intent);
+                activity.finish();
             }
 
             @Override
             public void onFailure(Call<Customer> call, Throwable t) {
+                Toast.makeText(context, "Incorrect email or password" , Toast.LENGTH_SHORT).show();
             }
         });
-        return currentCustomerLive;
     }
 
     public LiveData<Customer> getCustomerById(int id){
@@ -148,6 +162,18 @@ public class Repository {
         return eventsLive;
     }
 
+    public MutableLiveData<List<Event>> getLiveConcertsLive() {
+        return liveConcertsLive;
+    }
+
+    public MutableLiveData<List<Event>> getOnlineConcertsLive() {
+        return onlineConcertsLive;
+    }
+
+    public MutableLiveData<List<Event>> getFanMeetingsLive() {
+        return fanMeetingsLive;
+    }
+
     public MutableLiveData<List<Venue>> getVenuesLive() {
         return venuesLive;
     }
@@ -158,10 +184,6 @@ public class Repository {
 
     public void setEventId(int id) {
         currentEventId = id;
-    }
-
-    public MutableLiveData<Customer> getCurrentCustomer() {
-        return currentCustomerLive;
     }
 
     public void setCurrentCustomer(int id) {
@@ -196,6 +218,69 @@ public class Repository {
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 List<Event> events = response.body();
                 eventsLive.postValue(events);
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getLiveConcertsFromServer(){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Event>> call = service.getLiveConcerts();
+
+        call.enqueue(new Callback<List<Event>>() {
+
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                List<Event> events = response.body();
+                liveConcertsLive.postValue(events);
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getOnlineConcertsFromServer(){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Event>> call = service.getOnlineConcerts();
+
+        call.enqueue(new Callback<List<Event>>() {
+
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                List<Event> events = response.body();
+                onlineConcertsLive.postValue(events);
+            }
+
+            @Override
+            public void onFailure(Call<List<Event>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getFanMeetingsFromServer(){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Event>> call = service.getFanMeetings();
+
+        call.enqueue(new Callback<List<Event>>() {
+
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                List<Event> events = response.body();
+                fanMeetingsLive.postValue(events);
             }
 
             @Override
@@ -392,7 +477,6 @@ public class Repository {
 
 
     public void createAccount(Customer customer, final Context context, final View view) {
-
             ApiService service = RetrofitInstance.
                     getRetrofitInstance().create(ApiService.class);
 
@@ -410,6 +494,31 @@ public class Repository {
                     Log.d("STATE", "failure");
                 }
             });
+    }
+
+    public void updateCustomer(int id, Customer customer, final View view, final Context context){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        final int userId = id;
+
+        Call<Void> call = service.updateCustomer(userId, customer);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", userId);
+                Navigation.findNavController(view).navigate(R.id.myAccountFragment, bundle);
+                Toast.makeText(context, "Account updated successfully" , Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+
     }
 
     public void checkout(int userId, ShippingDetails shipping) {
@@ -451,6 +560,28 @@ public class Repository {
             }
         });
         return orderHistoryLive;
+    }
+
+    public LiveData<List<Order>> getOrdersFromServer(){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<List<Order>> call = service.getOrders();
+
+        call.enqueue(new Callback<List<Order>>() {
+
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                List<Order> orders = response.body();
+                ordersLive.postValue(orders);
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+
+            }
+        });
+        return ordersLive;
     }
 
 }

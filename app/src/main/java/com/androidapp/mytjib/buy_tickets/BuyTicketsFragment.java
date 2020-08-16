@@ -147,11 +147,21 @@ public class BuyTicketsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("userId", userId);
         switch (item.getItemId()) {
             case R.id.menu_myaccount:
-                Bundle bundle = new Bundle();
-                bundle.putInt("userId", userId);
-                Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_myAccountFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.myAccountFragment, bundle);
+                break;
+            case R.id.menu_live:
+                Navigation.findNavController(view).navigate(R.id.liveConcertsFragment, bundle);
+                break;
+            case R.id.menu_online:
+                Navigation.findNavController(view).navigate(R.id.onlineConcertsFragment, bundle);
+                break;
+            case R.id.menu_fan:
+                Navigation.findNavController(view).navigate(R.id.fanMeetingsFragment, bundle);
+                break;
         }
         return true;
     }

@@ -40,16 +40,23 @@ public class UserActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.menu_home:
+                Intent intentHome = new Intent(activity, UserActivity.class);
+                intentHome.putExtra("userId", userId);
+                startActivity(intentHome);
+                activity.finish();
+                break;
             case R.id.menu_logout:
                 Repository.getInstance().resetRepository();
-                Intent intent = new Intent(activity, LoginActivity.class);
-                startActivity(intent);
+                Intent intentLogOut = new Intent(activity, LoginActivity.class);
+                startActivity(intentLogOut);
                 activity.finish();
-
+                break;
             case R.id.menu_myaccount:
+            case R.id.menu_live:
+            case R.id.menu_online:
+            case R.id.menu_fan:
                 return false;
-
         }
 
         return true;

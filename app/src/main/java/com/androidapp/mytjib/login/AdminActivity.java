@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.network.Repository;
@@ -34,11 +35,14 @@ public class AdminActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.menu_logout_admin){
-            Repository.getInstance().resetRepository();
-            Intent intent = new Intent(activity, LoginActivity.class);
-            startActivity(intent);
-            activity.finish();
+        switch (item.getItemId()) {
+            case R.id.menu_logout_admin:
+                Repository.getInstance().resetRepository();
+                Intent intent = new Intent(activity, LoginActivity.class);
+                startActivity(intent);
+                activity.finish();
+            case R.id.orders_admin:
+                return false;
         }
 
         return true;

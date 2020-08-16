@@ -17,10 +17,21 @@ public class Order {
      */
 
     private int orderNum;
+    private Customer customer;
+    private ShippingDetails shippingDetails;
     private int price;
     private Date orderTime;
     private String status;
     private List<Ticket> tickets;
+
+    public Order(Customer customer, ShippingDetails shippingDetails, int price, Date orderTime, String status, List<Ticket> tickets) {
+        this.customer = customer;
+        this.shippingDetails = shippingDetails;
+        this.price = price;
+        this.orderTime = orderTime;
+        this.status = status;
+        this.tickets = tickets;
+    }
 
     public int getOrderNum() {
         return orderNum;
@@ -28,6 +39,22 @@ public class Order {
 
     public void setOrderNum(int orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public ShippingDetails getShippingDetails() {
+        return shippingDetails;
+    }
+
+    public void setShippingDetails(ShippingDetails shippingDetails) {
+        this.shippingDetails = shippingDetails;
     }
 
     public int getPrice() {

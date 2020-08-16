@@ -1,4 +1,4 @@
-package com.androidapp.mytjib.customer;
+package com.androidapp.mytjib.admin_panel.orders;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,30 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidapp.mytjib.R;
 import com.androidapp.mytjib.buy_tickets.Ticket;
+import com.androidapp.mytjib.customer.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder>{
+public class OrdersAdminAdapter extends RecyclerView.Adapter<OrdersAdminAdapter.ViewHolder>{
 
     private final Context context;
     private List<Order> orders;
 
-    public OrdersAdapter(Context context) {
+    public OrdersAdminAdapter(Context context) {
         this.context = context;
         orders = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public OrdersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrdersAdminAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.order_row, parent, false);
-        return new OrdersAdapter.ViewHolder(view);
+        return new OrdersAdminAdapter.ViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull OrdersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrdersAdminAdapter.ViewHolder holder, int position) {
         final Order order = orders.get(position);
         List<Ticket> orderTickets = order.getTickets();
 
@@ -42,7 +43,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         orderDetails += "Order Number: " + order.getOrderNum() + "\n\n";
         orderDetails += "Total Price: " + order.getPrice() + "\n";
         orderDetails += "Order Date: " + order.getOrderTime().toString() + "\n\n";
-        orderDetails += "Tickets:\n\n";
+        orderDetails += "Customer Details:\n" + order.getCustomer().toString() + "\n\n";
+        orderDetails += "Shipping Details:\n" + order.getShippingDetails().toString() + "\n\n";
+        orderDetails += "Tickets:\n";
 
         for(int i=0; i<orderTickets.size(); i++){
             orderDetails += orderTickets.get(i).toString()+ "\n";
