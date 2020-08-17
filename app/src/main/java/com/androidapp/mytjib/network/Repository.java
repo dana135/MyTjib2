@@ -51,6 +51,7 @@ public class Repository {
     private MutableLiveData<List<Order>> orderHistoryLive;
     private MutableLiveData<List<Order>> ordersLive;
     private int currentEventId;
+    private int responses;
 
     static Repository repository = new Repository();
 
@@ -67,6 +68,7 @@ public class Repository {
         this.venuesLive = new MutableLiveData<>();
         this.orderHistoryLive = new MutableLiveData<>();
         this.ordersLive = new MutableLiveData<>();
+        responses = 0;
     }
 
     public static Repository getInstance() { return repository; }
@@ -584,4 +586,107 @@ public class Repository {
         return ordersLive;
     }
 
+    public void initDbLevelOne(List<Venue> venues, final List<Event> events, final List<String[]> seats, List<Admin> admins,
+                               final List<Customer> customers, final List<ShippingDetails> shipping){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> adminsCall = service.addAdmins(admins);
+        Call<Void> venuesCall = service.addVenues(venues);
+        Call<Void> eventsCall = service.addEvents(events);
+
+        adminsCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+        venuesCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+        eventsCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                initDbLevelTwo(seats, customers, shipping);
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public void initDbLevelTwo(final List<String[]> seats, final List<Customer> customers, final List<ShippingDetails> shipping){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+
+        Call<Void> call = service.addTicketsList(seats);
+
+        call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                   initDbLevelThree(customers, shipping);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                }
+        });
+    }
+
+    public void initDbLevelThree(List<Customer> customers,  final List<ShippingDetails> shipping){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+
+        Call<Void> call = service.addCustomers(customers);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                initDbLevelFour(shipping);
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("STATE", "failure");
+            }
+        });
+    }
+
+    public void initDbLevelFour(List<ShippingDetails> shipping){
+        ApiService service = RetrofitInstance.
+                getRetrofitInstance().create(ApiService.class);
+        int customerId = 0;
+
+        for(int i=1; i<shipping.size(); i++) {
+            if(i<3) customerId = 1;
+            else if(i<5) customerId = 2;
+            else customerId = 3;
+            Call<Void> call = service.checkout(customerId, shipping.get(i-1));
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.d("STATE", "failure");
+                }
+            });
+        }
+    }
 }

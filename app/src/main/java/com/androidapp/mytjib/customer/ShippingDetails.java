@@ -20,11 +20,18 @@ public class ShippingDetails {
     private List<Integer> ticketIds;
 
     public ShippingDetails(String firstName, String lastName, String creditCard, int creditExpiration, List<Integer> ticketIds) {
-        this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.creditCard = creditCard;
         this.creditExpiration = creditExpiration;
+        this.ticketIds = ticketIds;
+    }
+
+    public ShippingDetails(ShippingDetails details, List<Integer> ticketIds){
+        this.firstName = details.getFirstName();
+        this.lastName = details.getLastName();
+        this.creditCard = details.getCreditCard();
+        this.creditExpiration = details.getCreditExpiration();
         this.ticketIds = ticketIds;
     }
 

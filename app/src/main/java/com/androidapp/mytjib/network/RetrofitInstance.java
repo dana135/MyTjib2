@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.moshi.Moshi;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -11,16 +13,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
     private static Retrofit retrofit;
-    //private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String BASE_URL = "http://192.168.44.1:8080/";
-    //private static final String BASE_URL = "http://tjib-gateway.azuremicroservices.io/";
 
 
     public static Retrofit getRetrofitInstance() {
 
         if (retrofit == null) {
-
-           // Moshi moshi = new Moshi.Builder().build();
 
             Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -29,6 +27,9 @@ public class RetrofitInstance {
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
                     .build();
 
             retrofit = new Retrofit.Builder()

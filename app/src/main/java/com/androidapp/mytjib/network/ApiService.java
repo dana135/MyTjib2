@@ -73,6 +73,9 @@ public interface ApiService {
     Call<Void> addEventTickets(@Path("id") int id, @Field("numOfTickets") int numOfTickets, @Field("section") String section,
                                @Field("price") int price);
 
+    @PUT("events/addticketslist")
+    Call<Void> addTicketsList(@Body List<String[]> details);
+
     @PUT("customers/{id}/checkout")
     Call<Void> checkout(@Path("id") int userId, @Body ShippingDetails shipping);
 
@@ -82,10 +85,22 @@ public interface ApiService {
     @POST("events")
     Call<Event> addEvent(@Body Event event);
 
+    @POST("eventslist")
+    Call<Void> addEvents(@Body List<Event> events);
+
     @POST("venues")
     Call<Void> addVenue(@Body Venue venue);
 
+    @POST("venueslist")
+    Call<Void> addVenues(@Body List<Venue> venues);
+
     @POST("customers")
     Call<Void> customerSignUp(@Body Customer customer);
+
+    @POST("customerslist")
+    Call<Void> addCustomers(@Body List<Customer> customers);
+
+    @POST("adminslist")
+    Call<Void> addAdmins(@Body List<Admin> admins);
 
 }
