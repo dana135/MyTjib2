@@ -1,26 +1,23 @@
 package com.androidapp.mytjib.admin_panel.venues;
 
+/**
+ * Represents a venue where an event takes place
+ */
+
 public class Venue {
-
-
-    /**
-     * id : 1
-     * venueName : SK Olympic Handball Gymnasium
-     * location : Seoul
-     * capacity : 5003
-     */
 
     private int id;
     private String venueName;
     private String location;
     private int capacity;
 
-    public Venue(String venueName, String location, int capacity) {
-    //    this.id = 0;
+    public Venue(String venueName, String location, int capacity) { //constructor
         this.venueName = venueName;
         this.location = location;
         this.capacity = capacity;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;

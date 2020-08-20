@@ -1,5 +1,7 @@
 package com.androidapp.mytjib.admin_panel.events;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -9,25 +11,29 @@ import com.androidapp.mytjib.network.Repository;
 
 import java.util.List;
 
+/**
+ *  store and manage UI-related data for event actions by admin
+ */
+
 public class EditEventsViewModel extends ViewModel {
 
     private Repository repository;
 
-    public void createRepository(){
+    public void createRepository(Context context) { // actions made with data from repository
         repository  = Repository.getInstance();
-        repository.getEventsFromServer();
+        repository.getEventsFromServer(context);
     }
 
     public LiveData<List<Event>> getEvents(){
         return repository.getEventsLive();
     }
 
-    public LiveData<List<Venue>> getVenues(){
-        return repository.getVenuesFromServer();
+    public LiveData<List<Venue>> getVenues(Context context){
+        return repository.getVenuesFromServer(context);
     }
 
-    public LiveData<Event> addEvent(Event event){
-        return repository.addEvent(event);
+    public LiveData<Event> addEvent(Event event, Context context){
+        return repository.addEvent(event, context);
     }
 
 }

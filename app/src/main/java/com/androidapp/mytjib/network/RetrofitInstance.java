@@ -11,20 +11,24 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Type-safe HTTP client
+ */
+
 public class RetrofitInstance {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://192.168.44.1:8080/";
-
+    private static final String BASE_URL = "http://192.168.44.1:8080/"; // url of the rest api server
 
     public static Retrofit getRetrofitInstance() {
 
         if (retrofit == null) {
+            Gson gson = new GsonBuilder().serializeNulls().create(); // gson builder to serialize json objects
 
-            Gson gson = new GsonBuilder().serializeNulls().create();
-
+            // log http request and response data
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
+            // a single client for all http requests
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
                     .connectTimeout(60, TimeUnit.SECONDS)
@@ -32,6 +36,7 @@ public class RetrofitInstance {
                     .readTimeout(60, TimeUnit.SECONDS)
                     .build();
 
+            // build a new retrofit
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))

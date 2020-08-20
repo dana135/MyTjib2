@@ -16,30 +16,30 @@ public class EditEventDetailsViewModel extends ViewModel {
 
     private Repository repository;
 
-    public void createRepository(int id){
+    public void createRepository(int id, Context context){
         repository  = Repository.getInstance();
         repository.setEventId(id);
-        repository.getEventDetailsFromServer();
+        repository.getEventDetailsFromServer(context);
     }
 
     public LiveData<Event> getEventDetails(){
         return repository.getEventDetailsLive();
     }
 
-    public void editEvent(Event event) {
-        repository.editEvent(event);
+    public void editEvent(Event event, Context context) {
+        repository.editEvent(event, context);
     }
 
     public void deleteEvent(View view, Context context){
         repository.deleteEvent(view, context);
     }
 
-    public LiveData<List<Venue>> getVenues(){
-        return repository.getVenuesFromServer();
+    public LiveData<List<Venue>> getVenues( Context context){
+        return repository.getVenuesFromServer(context);
     }
 
-    public void addEventTickets(int numOfTickets, String section, int price){
-        repository.addEventTickets(numOfTickets, section, price);
+    public void addEventTickets(int numOfTickets, String section, int price, Context context){
+        repository.addEventTickets(numOfTickets, section, price, context);
     }
 
 }

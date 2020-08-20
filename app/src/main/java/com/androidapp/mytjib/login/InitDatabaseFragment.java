@@ -29,18 +29,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Fragment for database initialization screen
+ * Used ONCE by admin before first launch of the app
+ */
+
 public class InitDatabaseFragment extends Fragment {
 
     private LoginViewModel mViewModel;
     private View view;
 
-    public static InitDatabaseFragment newInstance() {
-        return new InitDatabaseFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) { // set menu and inflate layout
         setHasOptionsMenu(false);
         return inflater.inflate(R.layout.init_db_fragment, container, false);
     }
@@ -48,13 +49,16 @@ public class InitDatabaseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // set fields
         view = getView();
         mViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         mViewModel.createRepository();
 
+        // set text to appear on screen
         TextView text = view.findViewById(R.id.db_init_text);
         text.setText("Please enter a password to initialize the database.\n**WARNING!**\n Do not initialize more than once.");
 
+        // initialize the database when button is pressed
         Button button = view.findViewById(R.id.db_init_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,12 +68,15 @@ public class InitDatabaseFragment extends Fragment {
         });
     }
 
-    public void authorizeInit() {
+    public void authorizeInit() { // check if initialization is authorized
+        // get the password entered to edit text
         EditText password = view.findViewById(R.id.db_init_password);
         String pass = password.getText().toString();
+        // password is incorrect
         if(!(pass.equals("Tjib4711"))) Toast.makeText(getContext(), "Wrong password", Toast.LENGTH_SHORT).show();
-        else {
-            initDb();
+        else { // password is correct
+            initDb(); // start database initialization
+            // create a dialog box which asks to wait for initialization to process
             final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle("Alert");
             alertDialog.setMessage("");
@@ -80,22 +87,20 @@ public class InitDatabaseFragment extends Fragment {
                         }
                     });
             alertDialog.show();
-            new CountDownTimer(60000, 1000) {
-
+            new CountDownTimer(60000, 1000) { // one minute timer
                 public void onTick(long millisUntilFinished) {
                     alertDialog.setMessage("Please allow the database to initialize.\nTime Remaining: " + millisUntilFinished / 1000);
                 }
-
                 public void onFinish() {
                     alertDialog.setMessage("done!");
                 }
-
             }.start();
-            Navigation.findNavController(view).navigate(R.id.loginFragment);
+            Navigation.findNavController(view).navigate(R.id.loginFragment); // go back to login fragment
         }
     }
 
-    public void initDb() {
+    public void initDb() { // set default data for initialization
+        // arrays to hold the data
         List<Venue> venues = new ArrayList<>();
         List<Event> events = new ArrayList<>();
         List<String[]> seats = new ArrayList<>();
@@ -103,6 +108,7 @@ public class InitDatabaseFragment extends Fragment {
         List<Customer> customers = new ArrayList<>();
         List<ShippingDetails> shipping = new ArrayList<>();
 
+        // set venues
         Venue venue1 = new Venue("Online", "Online", 1000000);
         Venue venue2 = new Venue("SK Olympic Handball Gymnasium", "Seoul", 5003);
         Venue venue3 = new Venue("Jamsil Olympic Stadium", "Seoul", 69950);
@@ -119,6 +125,7 @@ public class InitDatabaseFragment extends Fragment {
         venues.add(venue6);
         venues.add(venue7);
 
+        // set admins
         Admin admin1 = new Admin("interpark", "fixglobalsite2020", "tickethelp@interpark.com");
         Admin admin2 = new Admin("Melon", "thanks4mmm", "info@focuslive.kr");
         Admin admin3 = new Admin("Yes24", "stopyamails", "yesticket@yes24.com");
@@ -127,6 +134,7 @@ public class InitDatabaseFragment extends Fragment {
         admins.add(admin2);
         admins.add(admin3);
 
+        // set events
         Event event1 = new Event("MAMAMOO - 4 Seasons 4 Colors", "Live Concert", "https://i.ibb.co/vX5k3LB/event1-mamamoo.jpg",
                 "SK Olympic Handball Gymnasium", "2020-10-21 ; 19:00-21:00");
         Event event2 = new Event("BTS - Love Yourself Tour", "Live Concert", "https://i.ibb.co/gF3xWNz/bts-love-yourself-seoul.jpg",
@@ -189,6 +197,8 @@ public class InitDatabaseFragment extends Fragment {
         events.add(event19);
         events.add(event20);
 
+        // set seats (tickets available for each event)
+        // [event id] [number of tickets] [section] [price]
         seats.add(new String[]{"1", "81", "SITTING", "30000"});
         seats.add(new String[]{"1", "20", "STANDING", "25000"});
         seats.add(new String[]{"1", "10", "VIP", "40000"});
@@ -201,30 +211,31 @@ public class InitDatabaseFragment extends Fragment {
         seats.add(new String[]{"5", "100", "STANDING", "19000"});
         seats.add(new String[]{"6", "40", "VIP", "15000"});
         seats.add(new String[]{"7", "40", "VIP", "17000"});
-        seats.add(new String[]{"8", "64", "SITTING", "30000"}); //572+
+        seats.add(new String[]{"8", "64", "SITTING", "30000"});
         seats.add(new String[]{"8", "10", "STANDING", "25000"});
         seats.add(new String[]{"8", "5", "VIP", "40000"});
-        seats.add(new String[]{"9", "64", "SITTING", "38000"}); //651+
-        seats.add(new String[]{"10", "49", "SITTING", "33000"}); //715+
+        seats.add(new String[]{"9", "64", "SITTING", "38000"});
+        seats.add(new String[]{"10", "49", "SITTING", "33000"});
         seats.add(new String[]{"11", "90", "VIP", "22000"});
-        seats.add(new String[]{"12", "81", "SITTING", "49000"}); //854+
-        seats.add(new String[]{"13", "72", "SITTING", "30000"}); //935+
+        seats.add(new String[]{"12", "81", "SITTING", "49000"});
+        seats.add(new String[]{"13", "72", "SITTING", "30000"});
         seats.add(new String[]{"13", "15", "STANDING", "25000"});
         seats.add(new String[]{"13", "5", "VIP", "37000"});
         seats.add(new String[]{"14", "90", "VIP", "19000"});
-        seats.add(new String[]{"15", "100", "SITTING", "10000"}); //1117+
+        seats.add(new String[]{"15", "100", "SITTING", "10000"});
         seats.add(new String[]{"15", "30", "STANDING", "10000"});
-        seats.add(new String[]{"16", "64", "SITTING", "39000"}); //1247+
+        seats.add(new String[]{"16", "64", "SITTING", "39000"});
         seats.add(new String[]{"16", "10", "VIP", "49000"});
-        seats.add(new String[]{"17", "81", "SITTING", "30000"}); //1321
+        seats.add(new String[]{"17", "81", "SITTING", "30000"});
         seats.add(new String[]{"17", "30", "STANDING", "27000"});
         seats.add(new String[]{"18", "75", "VIP", "15000"});
-        seats.add(new String[]{"19", "100", "SITTING", "33000"}); //1477
+        seats.add(new String[]{"19", "100", "SITTING", "33000"});
         seats.add(new String[]{"19", "35", "STANDING", "28000"});
         seats.add(new String[]{"19", "15", "VIP", "43000"});
-        seats.add(new String[]{"20", "72", "SITTING", "30000"}); //1527
+        seats.add(new String[]{"20", "72", "SITTING", "30000"});
         seats.add(new String[]{"20", "18", "STANDING", "25000"});
 
+        // set customers
         Customer customer1 = new Customer("Serendipity", "jimminie@mochi.kr", "caughtinalie");
         Customer customer2 = new Customer("NayNay", "naya@rivera.star", "santanalopez");
         Customer customer3 = new Customer("Gdragon", "big@bang.yg", "oneofakind1");
@@ -233,6 +244,7 @@ public class InitDatabaseFragment extends Fragment {
         customers.add(customer2);
         customers.add(customer3);
 
+        // set shipping details for each customer
         ShippingDetails shipping1 = new ShippingDetails("Jimin", "Park", "50564736587", 1025, new ArrayList<Integer>());
         ShippingDetails shipping2 = new ShippingDetails("Naya", "Rivera", "5867749044", 1122, new ArrayList<Integer>());
         ShippingDetails shipping3 = new ShippingDetails("Ji-Yong", "Kwon", "53494674978", 1221, new ArrayList<Integer>());
@@ -245,6 +257,7 @@ public class InitDatabaseFragment extends Fragment {
         shipping.add(new ShippingDetails(shipping3, new ArrayList<>(Arrays.asList(1012,1540,1528,1481,862,1500,940))));
         shipping.add(new ShippingDetails(shipping3, new ArrayList<>(Arrays.asList(120,121,1423,363,402,403,721))));
 
-        mViewModel.initDatabase(venues, events, seats, admins, customers, shipping);
+        //  send the data to view model for initialization via repository
+        mViewModel.initDatabase(venues, events, seats, admins, customers, shipping, getContext());
     }
 }

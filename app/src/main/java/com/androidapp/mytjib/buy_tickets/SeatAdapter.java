@@ -1,7 +1,6 @@
 package com.androidapp.mytjib.buy_tickets;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,10 @@ import com.androidapp.mytjib.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for seats data of an event to display in grid view
+ */
+
 public class SeatAdapter extends BaseAdapter {
 
     public List<Ticket> tickets;
@@ -24,13 +27,15 @@ public class SeatAdapter extends BaseAdapter {
     public List<Ticket> selectedTickets;
     public Context context;
 
-    public SeatAdapter(Context context) {
+    public SeatAdapter(Context context) {  // constructor
         this.tickets = new ArrayList<>();
         this.standingTickets = new ArrayList<>();
         this.vipTickets = new ArrayList<>();
         this.selectedTickets = new ArrayList<>();
         this.context = context;
     }
+
+    // getters and setters
 
     @Override
     public int getCount() {
@@ -48,15 +53,15 @@ public class SeatAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, ViewGroup viewGroup) { // create and inflate view
         View v = LayoutInflater.from(context).inflate(R.layout.seat_data, null);
         final Ticket seatTicket = tickets.get(i);
         ImageView seatImage = v.findViewById(R.id.seat_img);
 
-        if(seatTicket.getStatus().equals("unavailable")){
+        if(seatTicket.getStatus().equals("unavailable")){ // when ticket is unavailable(sold), seat is gray
             seatImage.setColorFilter(ContextCompat.getColor(context, R.color.graySeat));
         }
-        if(seatTicket.getStatus().equals("selected")){
+        if(seatTicket.getStatus().equals("selected")){ // when ticket is selected by customer, seat is green
             seatImage.setColorFilter(ContextCompat.getColor(context, R.color.greenSeat));
         }
         return v;
@@ -79,7 +84,7 @@ public class SeatAdapter extends BaseAdapter {
         this.vipTickets = tickets;
     }
 
-    public void setTextViews(View sitting, View standing, View vip){
+    public void setTextViews(View sitting, View standing, View vip) {
         String sittingStr = "Section: SITTING ";
         if(tickets.size() == 0) sittingStr += "--Unavailable--";
         else sittingStr += ", Price: " + tickets.get(0).getPrice() + "₩";
@@ -97,7 +102,7 @@ public class SeatAdapter extends BaseAdapter {
         ((TextView)vip).setText(vipStr);
     }
 
-    public void selectTicket(int i) {
+    public void selectTicket(int i) { // add or remove sitting tickets for current order
         Ticket t = tickets.get(i);
 
         if(!t.getStatus().equals("unavailable") && !selectedTickets.contains(t)){
@@ -112,7 +117,7 @@ public class SeatAdapter extends BaseAdapter {
 
     }
 
-    public void selectStandingTickets(int numOfTickets) {
+    public void selectStandingTickets(int numOfTickets) { // add or remove standing tickets for current order
         int toAdd = numOfTickets;
         while(toAdd > 0){
             Ticket t = standingTickets.remove(0);
@@ -122,7 +127,7 @@ public class SeatAdapter extends BaseAdapter {
         }
     }
 
-    public void selectVipTickets(int numOfTickets) {
+    public void selectVipTickets(int numOfTickets) { // add or remove vip tickets for current order
         int toAdd = numOfTickets;
         while(toAdd > 0){
             Ticket t = vipTickets.remove(0);
@@ -132,13 +137,13 @@ public class SeatAdapter extends BaseAdapter {
         }
     }
 
-    public ArrayList<Integer> getTicketIds(){
+    public ArrayList<Integer> getTicketIds() { // ids of selected tickets to order
        ArrayList<Integer> ticketIds = new ArrayList<>();
        for(Ticket t : selectedTickets) ticketIds.add(t.getId());
        return ticketIds;
     }
 
-    public int getTotalPrice() {
+    public int getTotalPrice() { // total price of selected tickets
         int price = 0;
         for(Ticket t : selectedTickets) price += t.getPrice();
         return price;

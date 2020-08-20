@@ -2,15 +2,12 @@ package com.androidapp.mytjib.customer;
 
 import java.util.List;
 
-public class ShippingDetails {
+/**
+ * Represents payment details of a single order
+ * Tickets related to this shipping will be sent via email
+ */
 
-    /**
-     * id : 102
-     * firstName : Jimin
-     * lastName : Park
-     * creditCard : 654783905687
-     * creditExpiration : 1025
-     */
+public class ShippingDetails {
 
     private int id;
     private String firstName;
@@ -19,7 +16,8 @@ public class ShippingDetails {
     private int creditExpiration;
     private List<Integer> ticketIds;
 
-    public ShippingDetails(String firstName, String lastName, String creditCard, int creditExpiration, List<Integer> ticketIds) {
+    public ShippingDetails(String firstName, String lastName, String creditCard, int creditExpiration,
+                           List<Integer> ticketIds) { //constructor
         this.firstName = firstName;
         this.lastName = lastName;
         this.creditCard = creditCard;
@@ -27,13 +25,15 @@ public class ShippingDetails {
         this.ticketIds = ticketIds;
     }
 
-    public ShippingDetails(ShippingDetails details, List<Integer> ticketIds){
+    public ShippingDetails(ShippingDetails details, List<Integer> ticketIds){ //copy constructor
         this.firstName = details.getFirstName();
         this.lastName = details.getLastName();
         this.creditCard = details.getCreditCard();
         this.creditExpiration = details.getCreditExpiration();
         this.ticketIds = ticketIds;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;

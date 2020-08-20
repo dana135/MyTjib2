@@ -16,19 +16,27 @@ import com.androidapp.mytjib.network.Repository;
 
 import java.util.List;
 
+/**
+ *  store and manage UI-related data for login and register actions
+ */
+
 public class LoginViewModel extends ViewModel  {
 
     private Repository repository;
 
-    public void createRepository(){
+    public void createRepository() { // actions made with data from repository
         repository  = Repository.getInstance();;
     }
 
-    public void login(String email, String password, View view, Context context, Activity activity) {
-         repository.tryAdminLogin(email, password, view, context, activity);
+    public void login(String email, String password, Context context, Activity activity) { // login as admin or user(customer)
+         repository.tryAdminLogin(email, password, context, activity);
     }
-    public void customerSignUp(Customer customer, Context context, View view) { repository.customerSignUp(customer, context, view); }
-    public void initDatabase(List<Venue> venues, List<Event> events, List<String[]> seats, List<Admin> admins, List<Customer> customers, List<ShippingDetails> shipping) {
-        repository.initDbLevelOne(venues, events, seats, admins, customers, shipping); }
+
+    public void customerSignUp(Customer customer, Context context, View view) { // sign up as a customer
+        repository.customerSignUp(customer, context, view); }
+
+    public void initDatabase(List<Venue> venues, List<Event> events, List<String[]> seats, List<Admin> admins, List<Customer> customers,
+                             List<ShippingDetails> shipping, Context context) { // admin initialization of the database before first use
+        repository.initDbLevelOne(venues, events, seats, admins, customers, shipping, context); }
 
 }

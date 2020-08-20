@@ -1,5 +1,7 @@
 package com.androidapp.mytjib.admin_panel.orders;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -8,7 +10,11 @@ import com.androidapp.mytjib.network.Repository;
 
 import java.util.List;
 
-public class OrdersAdminViewModel extends ViewModel {
+/**
+ *  store and manage UI-related data for viewing orders
+ */
+
+public class OrdersAdminViewModel extends ViewModel { // actions made with data from repository
 
     private Repository repository;
 
@@ -16,6 +22,6 @@ public class OrdersAdminViewModel extends ViewModel {
         repository  = Repository.getInstance();
     }
 
-    public LiveData<List<Order>> getOrders() { return repository.getOrdersFromServer(); }
+    public LiveData<List<Order>> getOrders( Context context) { return repository.getOrdersFromServer(context); }
 
 }

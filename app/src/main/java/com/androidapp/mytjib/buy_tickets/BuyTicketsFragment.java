@@ -24,6 +24,11 @@ import com.androidapp.mytjib.event_details.EventDetailsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragment for ticket buying screen
+ * Customer can choose and purchase desired tickets (if available)
+ */
+
 public class BuyTicketsFragment extends Fragment {
 
     private int userId;
@@ -34,15 +39,15 @@ public class BuyTicketsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState) { // set menu and inflate layout
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.buy_tickets_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // set fields
         view = getView();
         mViewModel = ViewModelProviders.of(this).get(EventDetailsViewModel.class);
 
@@ -51,20 +56,23 @@ public class BuyTicketsFragment extends Fragment {
         this.userId = userId;
 
         adapter = new SeatAdapter(getContext());
-        mViewModel.createRepository(eventId);
+        mViewModel.createRepository(eventId, getContext());
 
-        mViewModel.getTickets().observe(getViewLifecycleOwner(), new Observer<List<Ticket>>() {
+        // get event tickets from view model via repository
+        mViewModel.getTickets(getContext()).observe(getViewLifecycleOwner(), new Observer<List<Ticket>>() {
             @Override
             public void onChanged(List<Ticket> tickets) {
                 updateSpinners(tickets);
+                // set adapter for grid view of tickets
                 adapter.setTickets(tickets);
                 adapter.setTextViews(view.findViewById(R.id.sitting_text), view.findViewById(R.id.standing_text), view.findViewById(R.id.vip_text));
-                int numOfSitting = 0;
+                int numOfSitting = 0; // tickets for 'sitting' section
                 for(Ticket t : tickets){
                     if(t.getSection().equals("SITTING")) numOfSitting++;
                 }
                 seatsGrid.setNumColumns((int)Math.sqrt(numOfSitting));
                 seatsGrid.setAdapter(adapter);
+                // click listener for clicking a certain seat
                 seatsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -74,23 +82,26 @@ public class BuyTicketsFragment extends Fragment {
             }
         });
 
+        // set button for buying selected tickets
         Button buyTickets = view.findViewById(R.id.buy_tickets_gridbtn);
         buyTickets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // get selected number of standing and vip tickets
                 Spinner stand = getView().findViewById(R.id.standing_spinner);
                 Spinner vip = getView().findViewById(R.id.vip_spinner);
                 int standingTickets = Integer.valueOf(stand.getSelectedItem().toString());
                 int vipTickets = Integer.valueOf(vip.getSelectedItem().toString());
                 adapter.selectStandingTickets(standingTickets);
                 adapter.selectVipTickets(vipTickets);
-                ArrayList<Integer> ids = adapter.getTicketIds();
+                ArrayList<Integer> ids = adapter.getTicketIds(); // ids of selected tickets
 
-                if(ids.size()>0 | standingTickets!=0 | vipTickets!=0) {
+                if(ids.size()>0 | standingTickets!=0 | vipTickets!=0) { // user selected at least one ticket
                     Bundle bundle = new Bundle();
                     bundle.putInt("userId", userId);
                     bundle.putIntegerArrayList("ticketIds", ids);
                     bundle.putInt("price", adapter.getTotalPrice());
+                    // go to shipping details fragment
                     Navigation.findNavController(view).navigate(R.id.action_buyTicketsFragment2_to_shippingDetailsFragment, bundle);
                 }
             }
@@ -99,18 +110,17 @@ public class BuyTicketsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) { // initialize views
         super.onViewCreated(view, savedInstanceState);
-
         this.view = view;
         seatsGrid = view.findViewById(R.id.tickets_grid);
     }
 
-    private void updateSpinners(List<Ticket> tickets){
-        ArrayList<String> standing_view = new ArrayList<>();
-        ArrayList<Ticket> standingTickets = new ArrayList<>();
-        ArrayList<String> vip_view = new ArrayList<>();
-        ArrayList<Ticket> vipTickets = new ArrayList<>();
+    private void updateSpinners(List<Ticket> tickets){ // update spinners with standing and vip tickets
+        ArrayList<String> standing_view = new ArrayList<>(); // hold standing tickets number
+        ArrayList<String> vip_view = new ArrayList<>(); // hold vip tickets number
+        ArrayList<Ticket> standingTickets = new ArrayList<>(); // actual standing tickets
+        ArrayList<Ticket> vipTickets = new ArrayList<>(); // actual vip tickets
 
         Integer availableStanding = 1;
         Integer availableVip = 1;
@@ -118,7 +128,7 @@ public class BuyTicketsFragment extends Fragment {
         standing_view.add("0");
         vip_view.add("0");
 
-        for (Ticket t : tickets) {
+        for (Ticket t : tickets) { // add available tickets to the suitable list
             if (t.getSection().equals("STANDING") & !t.getStatus().equals("unavailable")) {
                 standingTickets.add(t);
                 standing_view.add(availableStanding.toString());
@@ -131,35 +141,38 @@ public class BuyTicketsFragment extends Fragment {
             }
         }
 
+        // set spinner for standing tickets
         Spinner standingSpinner = getView().findViewById(R.id.standing_spinner);
         ArrayAdapter<String> standingAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, standing_view.toArray(new String[0]));
         standingSpinner.setAdapter(standingAdapter);
 
+        // set spinner for vip tickets
         Spinner vipSpinner = getView().findViewById(R.id.vip_spinner);
         ArrayAdapter<String> vipAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, vip_view.toArray(new String[0]));
         vipSpinner.setAdapter(vipAdapter);
 
+        // send data to adapter
         this.adapter.setStandingTickets(standingTickets);
         this.adapter.setVipTickets(vipTickets);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { // menu logic
         Bundle bundle = new Bundle();
         bundle.putInt("userId", userId);
         switch (item.getItemId()) {
-            case R.id.menu_myaccount:
+            case R.id.menu_myaccount: // go to my account fragment
                 Navigation.findNavController(view).navigate(R.id.myAccountFragment, bundle);
                 break;
-            case R.id.menu_live:
+            case R.id.menu_live: // go to live concerts fragment
                 Navigation.findNavController(view).navigate(R.id.liveConcertsFragment, bundle);
                 break;
-            case R.id.menu_online:
+            case R.id.menu_online: // go to online concerts fragment
                 Navigation.findNavController(view).navigate(R.id.onlineConcertsFragment, bundle);
                 break;
-            case R.id.menu_fan:
+            case R.id.menu_fan: // go to fan meetings fragment
                 Navigation.findNavController(view).navigate(R.id.fanMeetingsFragment, bundle);
                 break;
         }

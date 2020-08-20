@@ -21,6 +21,11 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * API service to dispatch network calls
+ * Request method and URL specified in the annotation
+ */
+
 public interface ApiService {
 
     @GET("events")

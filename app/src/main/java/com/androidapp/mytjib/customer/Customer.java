@@ -1,25 +1,24 @@
 package com.androidapp.mytjib.customer;
 
-public class Customer {
+/**
+ * Represents a customer of the application.
+ * Can buy tickets to concerts, edit personal details and view order history.
+ */
 
-    /**
-     * id : 6
-     * username : dushi
-     * password : badukachi
-     * email : spell@bnd.com
-     * shippingDetails : null
-     */
+public class Customer {
 
     private int id;
     private String username;
     private String password;
     private String email;
 
-    public Customer(String username, String email, String password) {
+    public Customer(String username, String email, String password) { //constructor
         this.username = username;
         this.email = email;
         this.password = password;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;

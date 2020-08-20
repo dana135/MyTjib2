@@ -1,24 +1,24 @@
 package com.androidapp.mytjib.admin_panel;
 
+/**
+ * Represents an administrator of the application
+ * Can edit, add or remove events, add venues, track orders
+ */
+
 public class Admin {
-
-
-    /**
-     * username : interpark
-     * password : fixglobalsite2020
-     * email : tickethelp@interpark.com
-     */
 
     private int id;
     private String username;
     private String password;
     private String email;
 
-    public Admin(String username, String password, String email) {
+    public Admin(String username, String password, String email) { //constructor
         this.username = username;
         this.password = password;
         this.email = email;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;

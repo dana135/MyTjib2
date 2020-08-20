@@ -5,33 +5,29 @@ import com.androidapp.mytjib.buy_tickets.Ticket;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Represents a single order that a specific customer placed
+ * May contain multiple tickets
+ */
+
 public class Order {
-
-
-    /**
-     * orderNum : 2
-     * tickets : [{"id":101,"eventName":"MAMAMOO 4 Seasons 4 Colors","section":"GROUND","position":1,"price":30000,"status":"unavailable","marked":true}]
-     * price : 0
-     * orderTime : 2020-08-11T17:22:53.257+00:00
-     * status : completed
-     */
 
     private int orderNum;
     private Customer customer;
     private ShippingDetails shippingDetails;
     private int price;
     private Date orderTime;
-    private String status;
     private List<Ticket> tickets;
 
-    public Order(Customer customer, ShippingDetails shippingDetails, int price, Date orderTime, String status, List<Ticket> tickets) {
+    public Order(Customer customer, ShippingDetails shippingDetails, int price, Date orderTime, List<Ticket> tickets) { //customer
         this.customer = customer;
         this.shippingDetails = shippingDetails;
         this.price = price;
         this.orderTime = orderTime;
-        this.status = status;
         this.tickets = tickets;
     }
+
+    //getters and setters
 
     public int getOrderNum() {
         return orderNum;
@@ -71,14 +67,6 @@ public class Order {
 
     public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public List<Ticket> getTickets() {

@@ -1,20 +1,10 @@
 package com.androidapp.mytjib.events;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
+/**
+ * Represents an event with tickets for sale
+ */
 
 public class Event {
-
-
-    /**
-     * id : 1
-     * name : MAMAMOO 4 Seasons 4 Colors
-     * eventType : Live Concert
-     * dateAndTime : [2020,10,21,19,21]
-     * image : https://ibb.co/fDRHkrS
-     * venueName : SK Olympic Handball Gymnasium
-     */
 
     private int id;
     private String name;
@@ -23,7 +13,7 @@ public class Event {
     private String venueName;
     private String dateAndTime;
 
-    public Event(String name, String eventType, String image, String venueName, String dateAndTime) {
+    public Event(String name, String eventType, String image, String venueName, String dateAndTime) { //constructor
         this.id = 0;
         this.name = name;
         this.eventType = eventType;
@@ -31,6 +21,8 @@ public class Event {
         this.venueName = venueName;
         this.dateAndTime = dateAndTime;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;

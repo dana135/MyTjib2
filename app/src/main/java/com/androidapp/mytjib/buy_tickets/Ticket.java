@@ -2,17 +2,11 @@ package com.androidapp.mytjib.buy_tickets;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Represents a single ticket to a specific event
+ */
+
 public class Ticket {
-
-
-    /**
-     * id : 101
-     * eventName : MAMAMOO 4 Seasons 4 Colors
-     * section : GROUND
-     * position : 1
-     * price : 30000
-     * status : unavailable
-     */
 
     private int id;
     private String eventName;
@@ -21,7 +15,7 @@ public class Ticket {
     private int price;
     private String status;
 
-    public Ticket(int id, String eventName, String section, int position, int price, String status) {
+    public Ticket(int id, String eventName, String section, int position, int price, String status) { //constructor
         this.id = id;
         this.eventName = eventName;
         this.section = section;
@@ -29,6 +23,8 @@ public class Ticket {
         this.price = price;
         this.status = status;
     }
+
+    //getters and setters
 
     public int getId() {
         return id;
